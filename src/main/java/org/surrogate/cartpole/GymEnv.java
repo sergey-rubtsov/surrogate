@@ -27,13 +27,8 @@ import org.bytedeco.numpy.PyArrayObject;
 import org.deeplearning4j.gym.StepReply;
 import org.deeplearning4j.rl4j.mdp.MDP;
 import org.deeplearning4j.rl4j.mdp.gym.ActionTransformer;
-import org.deeplearning4j.rl4j.space.ActionSpace;
-import org.deeplearning4j.rl4j.space.ArrayObservationSpace;
-import org.deeplearning4j.rl4j.space.Box;
-import org.deeplearning4j.rl4j.space.Encodable;
-import org.deeplearning4j.rl4j.space.HighLowDiscrete;
-import org.deeplearning4j.rl4j.space.ObservationSpace;
-import org.surrogate.cartpole.continuous.ContinuousSpace;
+import org.deeplearning4j.rl4j.space.*;
+
 
 import java.io.IOException;
 
@@ -108,7 +103,7 @@ public class GymEnv<OBSERVATION extends Encodable, A, AS extends ActionSpace<A>>
     }
     private PyObject locals;
 
-    final protected ContinuousSpace actionSpace;
+    final protected DiscreteSpace actionSpace;
     final protected ObservationSpace<OBSERVATION> observationSpace;
     @Getter
     final private String envId;
@@ -150,7 +145,7 @@ public class GymEnv<OBSERVATION extends Encodable, A, AS extends ActionSpace<A>>
             Py_DecRef(shapeTuple);
 
             PyObject n = PyRun_StringFlags("env.action_space.n", Py_eval_input, globals, locals, null);
-            actionSpace = new ContinuousSpace((int)PyLong_AsLong(n));
+            actionSpace = new DiscreteSpace((int)PyLong_AsLong(n));
             Py_DecRef(n);
             checkPythonError();
         } finally {
