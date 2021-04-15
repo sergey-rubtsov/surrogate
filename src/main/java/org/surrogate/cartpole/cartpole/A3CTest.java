@@ -18,9 +18,11 @@ package org.surrogate.cartpole.cartpole;
 
 import org.deeplearning4j.rl4j.learning.async.a3c.discrete.A3CDiscrete;
 import org.deeplearning4j.rl4j.learning.async.a3c.discrete.A3CDiscreteDense;
+import org.deeplearning4j.rl4j.mdp.MDP;
 import org.deeplearning4j.rl4j.network.ac.ActorCriticFactorySeparateStdDense;
 import org.deeplearning4j.rl4j.policy.ACPolicy;
 import org.deeplearning4j.rl4j.space.Box;
+import org.deeplearning4j.rl4j.space.DiscreteSpace;
 import org.nd4j.linalg.learning.config.Adam;
 
 import java.io.IOException;
@@ -34,7 +36,7 @@ public class A3CTest {
 
     private static void A3CSimple() throws IOException {
         //define the mdp from gym (name, render)
-        CartpoleNative mdp = new CartpoleNative(1);
+        MDP<Box, Integer, DiscreteSpace> mdp = new CartpoleNative(1);
 
         A3CDiscrete.A3CConfiguration CARTPOLE_A3C =
             A3CDiscrete.A3CConfiguration.builder()
@@ -58,7 +60,7 @@ public class A3CTest {
             .build();
 
         //define the training
-        A3CDiscreteDense<Box> a3c = new A3CDiscreteDense<>(mdp, CARTPOLE_NET_A3C, CARTPOLE_A3C);
+        A3CDiscreteDense<Box> a3c = new A3CDiscreteDense<Box>(mdp, CARTPOLE_NET_A3C, CARTPOLE_A3C);
 
         a3c.train(); //start the training
         mdp.close();

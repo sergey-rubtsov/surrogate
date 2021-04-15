@@ -77,7 +77,7 @@ public class DQNTest
         HardDeteministicToy mdp = new HardDeteministicToy();
 
         //Create the solver.
-        QLearningDiscreteDense<HardToyState> dql = new QLearningDiscreteDense<HardToyState>(mdp, CARTPOLE_NET, CARTPOLE_QL);
+        QLearningDiscreteDense<HardToyState> dql = new QLearningDiscreteDense<HardToyState>(mdp, CARTPOLE_NET, CARTPOLE_QL, null);
 
         dql.train();
         mdp.close();
