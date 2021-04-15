@@ -34,7 +34,7 @@ import java.util.Collection;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/9/16.
- *
+ * <p>
  * Standard implementation of ActorCriticCompGraph
  */
 public class ActorCriticCompGraph implements IActorCritic<ActorCriticCompGraph> {
@@ -48,16 +48,16 @@ public class ActorCriticCompGraph implements IActorCritic<ActorCriticCompGraph> 
         this.recurrent = cg.getOutputLayer(0) instanceof RnnOutputLayer;
     }
 
-    public NeuralNetwork[] getNeuralNetworks() {
-        return new NeuralNetwork[] { cg };
-    }
-
     public static ActorCriticCompGraph load(String path) throws IOException {
         return new ActorCriticCompGraph(ModelSerializer.restoreComputationGraph(path));
     }
 
+    public NeuralNetwork[] getNeuralNetworks() {
+        return new NeuralNetwork[]{cg};
+    }
+
     public void fit(INDArray input, INDArray[] labels) {
-        cg.fit(new INDArray[] {input}, labels);
+        cg.fit(new INDArray[]{input}, labels);
     }
 
     public void reset() {
@@ -94,7 +94,7 @@ public class ActorCriticCompGraph implements IActorCritic<ActorCriticCompGraph> 
                 l.onGradientCalculation(cg);
             }
         }
-        return new Gradient[] {cg.gradient()};
+        return new Gradient[]{cg.gradient()};
     }
 
 

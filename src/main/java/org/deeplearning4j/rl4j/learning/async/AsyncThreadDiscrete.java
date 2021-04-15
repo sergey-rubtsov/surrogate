@@ -42,13 +42,14 @@ public abstract class AsyncThreadDiscrete<OBSERVATION extends Encodable, NN exte
         extends AsyncThread<OBSERVATION, Integer, DiscreteSpace, NN> {
 
     @Getter
-    private NN current;
+    private final NN current;
 
     @Setter(AccessLevel.PROTECTED)
     private UpdateAlgorithm<NN> updateAlgorithm;
 
     // TODO: Make it configurable with a builder
-    @Setter(AccessLevel.PROTECTED) @Getter
+    @Setter(AccessLevel.PROTECTED)
+    @Getter
     private ExperienceHandler experienceHandler = new StateActionExperienceHandler();
 
     public AsyncThreadDiscrete(IAsyncGlobal<NN> asyncGlobal,
@@ -81,7 +82,7 @@ public abstract class AsyncThreadDiscrete<OBSERVATION extends Encodable, NN exte
      * "Subepoch"  correspond to the t_max-step iterations
      * that stack rewards with t_max MiniTrans
      *
-     * @param sObs  the obs to start from
+     * @param sObs          the obs to start from
      * @param trainingSteps the number of training steps
      * @return subepoch training informations
      */

@@ -60,28 +60,21 @@ public abstract class QLearningDiscrete<O extends Encodable> extends QLearning<O
     final private QLearningConfiguration configuration;
     private final LegacyMDPWrapper<O, Integer, DiscreteSpace> mdp;
     @Getter
-    private DQNPolicy<O> policy;
-    @Getter
-    private EpsGreedy<O, Integer, DiscreteSpace> egPolicy;
-
-    @Getter
     final private IDQN qNetwork;
+    ITDTargetAlgorithm tdTargetAlgorithm;
+    @Getter
+    private final DQNPolicy<O> policy;
+    @Getter
+    private final EpsGreedy<O, Integer, DiscreteSpace> egPolicy;
     @Getter
     @Setter(AccessLevel.PROTECTED)
     private IDQN targetQNetwork;
-
     private int lastAction;
     private double accuReward = 0;
-
-    ITDTargetAlgorithm tdTargetAlgorithm;
-
     // TODO: User a builder and remove the setter
-    @Getter(AccessLevel.PROTECTED) @Setter
+    @Getter(AccessLevel.PROTECTED)
+    @Setter
     private ExperienceHandler<Integer, Transition<Integer>> experienceHandler;
-
-    protected LegacyMDPWrapper<O, Integer, DiscreteSpace> getLegacyMDPWrapper() {
-        return mdp;
-    }
 
     public QLearningDiscrete(MDP<O, Integer, DiscreteSpace> mdp, IDQN dqn, QLearningConfiguration conf, int epsilonNbStep) {
         this(mdp, dqn, conf, epsilonNbStep, Nd4j.getRandomFactory().getNewRandomInstance(conf.getSeed()));
@@ -102,6 +95,10 @@ public abstract class QLearningDiscrete<O extends Encodable> extends QLearning<O
                 : new StandardDQN(this, conf.getGamma(), conf.getErrorClamp());
 
         experienceHandler = new ReplayMemoryExperienceHandler(conf.getExpRepMaxSize(), conf.getBatchSize(), random);
+    }
+
+    protected LegacyMDPWrapper<O, Integer, DiscreteSpace> getLegacyMDPWrapper() {
+        return mdp;
     }
 
     public MDP<O, Integer, DiscreteSpace> getMdp() {

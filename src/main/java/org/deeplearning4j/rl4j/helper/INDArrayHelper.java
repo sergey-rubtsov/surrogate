@@ -27,7 +27,7 @@ public class INDArrayHelper {
 
     /**
      * MultiLayerNetwork and ComputationGraph expects input data to be in NCHW in the case of pixels and NS in case of other data types.
-     *
+     * <p>
      * We must have either shape 2 (NK) or shape 4 (NCHW)
      */
     public static INDArray forceCorrectShape(INDArray source) {

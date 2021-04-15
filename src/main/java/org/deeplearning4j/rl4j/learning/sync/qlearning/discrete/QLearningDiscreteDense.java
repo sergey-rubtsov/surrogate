@@ -54,7 +54,7 @@ public class QLearningDiscreteDense<OBSERVATION extends Encodable> extends QLear
     public QLearningDiscreteDense(MDP<OBSERVATION, Integer, DiscreteSpace> mdp, DQNFactory factory,
                                   QLConfiguration conf, IDataManager dataManager) {
         this(mdp, factory.buildDQN(mdp.getObservationSpace().getShape(), mdp.getActionSpace().getSize()), conf,
-                        dataManager);
+                dataManager);
     }
 
     @Deprecated

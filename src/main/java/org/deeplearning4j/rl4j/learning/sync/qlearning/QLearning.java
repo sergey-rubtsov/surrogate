@@ -50,8 +50,13 @@ import java.util.List;
  */
 @Slf4j
 public abstract class QLearning<O extends Encodable, A, AS extends ActionSpace<A>>
-                extends SyncLearning<O, A, AS, IDQN>
-                implements TargetQNetworkSource, IEpochTrainer {
+        extends SyncLearning<O, A, AS, IDQN>
+        implements TargetQNetworkSource, IEpochTrainer {
+
+    @Getter
+    private int episodeCount;
+    @Getter
+    private int currentEpisodeStepCount = 0;
 
     protected abstract LegacyMDPWrapper<O, A, AS> getLegacyMDPWrapper();
 
@@ -81,12 +86,6 @@ public abstract class QLearning<O extends Encodable, A, AS extends ActionSpace<A
     protected abstract void postEpoch();
 
     protected abstract QLStepReturn<Observation> trainStep(Observation obs);
-
-    @Getter
-    private int episodeCount;
-
-    @Getter
-    private int currentEpisodeStepCount = 0;
 
     protected StatEntry trainEpoch() {
         resetNetworks();
@@ -129,7 +128,7 @@ public abstract class QLearning<O extends Encodable, A, AS extends ActionSpace<A
 
 
         StatEntry statEntry = new QLStatEntry(this.getStepCount(), getEpochCount(), reward, currentEpisodeStepCount, scores,
-                        getEgPolicy().getEpsilon(), startQ, meanQ);
+                getEgPolicy().getEpsilon(), startQ, meanQ);
 
         return statEntry;
     }
@@ -218,10 +217,6 @@ public abstract class QLearning<O extends Encodable, A, AS extends ActionSpace<A
         int epsilonNbStep;
         boolean doubleDQN;
 
-        @JsonPOJOBuilder(withPrefix = "")
-        public static final class QLConfigurationBuilder {
-        }
-
         public QLearningConfiguration toLearningConfiguration() {
 
             return QLearningConfiguration.builder()
@@ -239,6 +234,10 @@ public abstract class QLearning<O extends Encodable, A, AS extends ActionSpace<A
                     .epsilonNbStep(epsilonNbStep)
                     .doubleDQN(doubleDQN)
                     .build();
+        }
+
+        @JsonPOJOBuilder(withPrefix = "")
+        public static final class QLConfigurationBuilder {
         }
     }
 

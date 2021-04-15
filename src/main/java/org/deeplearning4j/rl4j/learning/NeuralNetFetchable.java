@@ -20,7 +20,7 @@ import org.deeplearning4j.rl4j.network.NeuralNet;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/19/16.
- *
+ * <p>
  * Common interface for all training that contain a neural net
  * fetchable for evaluation
  */

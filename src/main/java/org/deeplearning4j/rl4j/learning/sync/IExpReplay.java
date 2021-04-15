@@ -20,13 +20,13 @@ import java.util.ArrayList;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/6/16.
- *
+ * <p>
  * Common Interface for Experience replays
- *
+ * <p>
  * A prioritized Exp Replay could be implemented by changing the interface
  * and integrating the TD-error in the transition for ranking
  * Not a high priority feature right now
- *
+ * <p>
  * The memory is optimised by using array of INDArray in the transitions
  * such that two same INDArrays are not allocated twice
  */
@@ -43,7 +43,6 @@ public interface IExpReplay<A> {
     ArrayList<Transition<A>> getBatch();
 
     /**
-     *
      * @param transition a new transition to store
      */
     void store(Transition<A> transition);

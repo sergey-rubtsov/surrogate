@@ -14,7 +14,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ******************************************************************************/
 
-package org.surrogate.cartpole;
+package org.surrogate.env.toy;
 
 import lombok.Getter;
 import org.deeplearning4j.gym.StepReply;

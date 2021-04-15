@@ -37,13 +37,11 @@ import java.util.Random;
  */
 
 public class CartpoleNative implements MDP<Box, Integer, DiscreteSpace> {
-    public enum KinematicsIntegrators { Euler, SemiImplicitEuler };
-
     private static final int NUM_ACTIONS = 2;
+
     private static final int ACTION_LEFT = 0;
     private static final int ACTION_RIGHT = 1;
     private static final int OBSERVATION_NUM_FEATURES = 4;
-
     private static final double gravity = 9.8;
     private static final double massCart = 1.0;
     private static final double massPole = 0.1;
@@ -52,30 +50,24 @@ public class CartpoleNative implements MDP<Box, Integer, DiscreteSpace> {
     private static final double polemassLength = massPole * length;
     private static final double forceMag = 10.0;
     private static final double tau = 0.02;  // seconds between state updates
-
     // Angle at which to fail the episode
     private static final double thetaThresholdRadians = 12.0 * 2.0 * Math.PI / 360.0;
     private static final double xThreshold = 2.4;
-
     private final Random rnd;
-
-    @Getter @Setter
+    @Getter
+    @Setter
     private KinematicsIntegrators kinematicsIntegrator = KinematicsIntegrators.Euler;
-
     @Getter
     private boolean done = false;
-
     private double x;
     private double xDot;
     private double theta;
     private double thetaDot;
     private Integer stepsBeyondDone;
-
     @Getter
-    private DiscreteSpace actionSpace = new DiscreteSpace(NUM_ACTIONS);
+    private final DiscreteSpace actionSpace = new DiscreteSpace(NUM_ACTIONS);
     @Getter
-    private ObservationSpace<Box> observationSpace = new ArrayObservationSpace(new int[] { OBSERVATION_NUM_FEATURES });
-
+    private final ObservationSpace<Box> observationSpace = new ArrayObservationSpace(new int[]{OBSERVATION_NUM_FEATURES});
     public CartpoleNative() {
         rnd = new Random();
     }
@@ -108,10 +100,10 @@ public class CartpoleNative implements MDP<Box, Integer, DiscreteSpace> {
         double cosTheta = Math.cos(theta);
         double sinTheta = Math.sin(theta);
         double temp = (force + polemassLength * thetaDot * thetaDot * sinTheta) / totalMass;
-        double thetaAcc = (gravity * sinTheta - cosTheta* temp) / (length * (4.0/3.0 - massPole * cosTheta * cosTheta / totalMass));
+        double thetaAcc = (gravity * sinTheta - cosTheta * temp) / (length * (4.0 / 3.0 - massPole * cosTheta * cosTheta / totalMass));
         double xAcc = temp - polemassLength * thetaAcc * cosTheta / totalMass;
 
-        switch(kinematicsIntegrator) {
+        switch (kinematicsIntegrator) {
             case Euler:
                 x += tau * xDot;
                 xDot += tau * xAcc;
@@ -127,18 +119,16 @@ public class CartpoleNative implements MDP<Box, Integer, DiscreteSpace> {
                 break;
         }
 
-        done |=  x < -xThreshold || x > xThreshold
+        done |= x < -xThreshold || x > xThreshold
                 || theta < -thetaThresholdRadians || theta > thetaThresholdRadians;
 
         double reward;
-        if(!done) {
+        if (!done) {
             reward = 1.0;
-        }
-        else if(stepsBeyondDone == null) {
+        } else if (stepsBeyondDone == null) {
             stepsBeyondDone = 0;
             reward = 1.0;
-        }
-        else {
+        } else {
             ++stepsBeyondDone;
             reward = 0;
         }
@@ -150,5 +140,7 @@ public class CartpoleNative implements MDP<Box, Integer, DiscreteSpace> {
     public MDP<Box, Integer, DiscreteSpace> newInstance() {
         return new CartpoleNative();
     }
+
+    public enum KinematicsIntegrators {Euler, SemiImplicitEuler}
 
 }

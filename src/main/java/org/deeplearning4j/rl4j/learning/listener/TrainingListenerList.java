@@ -33,6 +33,7 @@ public class TrainingListenerList {
 
     /**
      * Add a listener at the end of the list
+     *
      * @param listener The listener to be added
      */
     public void add(TrainingListener listener) {
@@ -41,6 +42,7 @@ public class TrainingListenerList {
 
     /**
      * Notify the listeners that the training has started. Will stop early if a listener returns {@link TrainingListener.ListenerResponse#STOP}
+     *
      * @return whether or not the source training should be stopped
      */
     public boolean notifyTrainingStarted() {
@@ -64,6 +66,7 @@ public class TrainingListenerList {
 
     /**
      * Notify the listeners that a new epoch has started. Will stop early if a listener returns {@link TrainingListener.ListenerResponse#STOP}
+     *
      * @return whether or not the source training should be stopped
      */
     public boolean notifyNewEpoch(IEpochTrainer trainer) {
@@ -78,6 +81,7 @@ public class TrainingListenerList {
 
     /**
      * Notify the listeners that an epoch has been completed and the training results are available. Will stop early if a listener returns {@link TrainingListener.ListenerResponse#STOP}
+     *
      * @return whether or not the source training should be stopped
      */
     public boolean notifyEpochTrainingResult(IEpochTrainer trainer, IDataManager.StatEntry statEntry) {

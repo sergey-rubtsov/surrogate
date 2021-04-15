@@ -28,6 +28,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 public interface HistoryMergeAssembler {
     /**
      * Assemble an array of INDArray into a single INArray
+     *
      * @param elements The input INDArray[]
      * @return the assembled INDArray
      */

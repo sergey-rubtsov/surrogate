@@ -27,7 +27,6 @@ import org.nd4j.linalg.ops.transforms.Transforms;
 import org.nd4j.shade.jackson.annotation.JsonInclude;
 
 /**
- *
  * Custom loss function required for Actor-Critic methods:
  * <pre>
  * L = sum_i advantage_i * log( probability_i ) + entropy( probability )
@@ -57,7 +56,7 @@ public class ActorCriticLoss implements ILossFunction {
 
     @Override
     public double computeScore(INDArray labels, INDArray preOutput, IActivation activationFn, INDArray mask,
-                    boolean average) {
+                               boolean average) {
         INDArray scoreArr = scoreArray(labels, preOutput, activationFn, mask);
         double score = -scoreArr.sumNumber().doubleValue();
         return average ? score / scoreArr.size(0) : score;
@@ -85,9 +84,9 @@ public class ActorCriticLoss implements ILossFunction {
 
     @Override
     public Pair<Double, INDArray> computeGradientAndScore(INDArray labels, INDArray preOutput, IActivation activationFn,
-                    INDArray mask, boolean average) {
+                                                          INDArray mask, boolean average) {
         return new Pair<>(computeScore(labels, preOutput, activationFn, mask, average),
-                        computeGradient(labels, preOutput, activationFn, mask));
+                computeGradient(labels, preOutput, activationFn, mask));
     }
 
     @Override

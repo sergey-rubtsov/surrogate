@@ -37,7 +37,7 @@ public class ReplayMemoryExperienceHandler<A> implements ExperienceHandler<A, Tr
     private static final int DEFAULT_MAX_REPLAY_MEMORY_SIZE = 150000;
     private static final int DEFAULT_BATCH_SIZE = 32;
 
-    private IExpReplay<A> expReplay;
+    private final IExpReplay<A> expReplay;
 
     private Transition<A> pendingTransition;
 
@@ -78,7 +78,7 @@ public class ReplayMemoryExperienceHandler<A> implements ExperienceHandler<A, Tr
     }
 
     private void setNextObservationOnPending(Observation observation) {
-        if(pendingTransition != null) {
+        if (pendingTransition != null) {
             pendingTransition.setNextObservation(observation);
             expReplay.store(pendingTransition);
         }

@@ -28,7 +28,7 @@ import java.io.IOException;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) 7/18/16.
- *
+ * <p>
  * DQN policy returns the action with the maximum Q-value as evaluated
  * by the dqn model
  */

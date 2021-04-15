@@ -18,7 +18,7 @@ package org.deeplearning4j.rl4j.util;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/2/16.
- *
+ * <p>
  * Utility class containing constants
  */
 public class Constants {
@@ -33,7 +33,6 @@ public class Constants {
     final public static int MONITOR_FREQ = 10000;
     final public static int NEURAL_NET_SEED = 12345;
     final public static int NEURAL_NET_ITERATION_LISTENER = 50;
-
 
 
 }

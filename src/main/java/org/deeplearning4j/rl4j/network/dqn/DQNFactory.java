@@ -21,6 +21,6 @@ package org.deeplearning4j.rl4j.network.dqn;
  */
 public interface DQNFactory {
 
-    IDQN buildDQN(int shapeInputs[], int numOutputs);
+    IDQN buildDQN(int[] shapeInputs, int numOutputs);
 
 }

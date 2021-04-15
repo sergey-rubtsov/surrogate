@@ -41,13 +41,19 @@ import org.nd4j.linalg.factory.Nd4j;
  */
 @Slf4j
 public abstract class AsyncLearning<OBSERVATION extends Encodable, ACTION, ACTION_SPACE extends ActionSpace<ACTION>, NN extends NeuralNet>
-                extends Learning<OBSERVATION, ACTION, ACTION_SPACE, NN>
-                implements IAsyncLearning {
-
-    private Thread monitorThread = null;
+        extends Learning<OBSERVATION, ACTION, ACTION_SPACE, NN>
+        implements IAsyncLearning {
 
     @Getter(AccessLevel.PROTECTED)
     private final TrainingListenerList listeners = new TrainingListenerList();
+    private Thread monitorThread = null;
+    private boolean canContinue = true;
+    /**
+     * Number of milliseconds between calls to onTrainingProgress
+     */
+    @Getter
+    @Setter
+    private int progressMonitorFrequency = 20000;
 
     /**
      * Add a {@link TrainingListener} listener at the end of the listener list.
@@ -72,15 +78,6 @@ public abstract class AsyncLearning<OBSERVATION extends Encodable, ACTION, ACTIO
     protected boolean isTrainingComplete() {
         return getAsyncGlobal().isTrainingComplete();
     }
-
-    private boolean canContinue = true;
-
-    /**
-     * Number of milliseconds between calls to onTrainingProgress
-     */
-    @Getter
-    @Setter
-    private int progressMonitorFrequency = 20000;
 
     private void launchThreads() {
         for (int i = 0; i < getConfiguration().getNumThreads(); i++) {

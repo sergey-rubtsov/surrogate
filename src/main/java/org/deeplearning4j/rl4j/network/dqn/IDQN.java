@@ -23,9 +23,8 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) 7/12/16.
- *
+ * <p>
  * This neural net quantify the value of each action given a state
- *
  */
 public interface IDQN<NN extends IDQN> extends NeuralNet<NN> {
 
@@ -36,8 +35,9 @@ public interface IDQN<NN extends IDQN> extends NeuralNet<NN> {
     void fit(INDArray input, INDArray labels);
 
     void fit(INDArray input, INDArray[] labels);
-	
+
     INDArray output(INDArray batch);
+
     INDArray output(Observation observation);
 
     INDArray[] outputAll(INDArray batch);

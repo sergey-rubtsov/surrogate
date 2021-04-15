@@ -49,9 +49,10 @@ public class StandardDQN extends BaseDQNAlgorithm {
 
     /**
      * In litterature, this corresponds to:<br />
-     *      Q(s_t, a_t) = R_{t+1} + \gamma * max_{a}Q_{tar}(s_{t+1}, a)
-     * @param batchIdx The index in the batch of the current transition
-     * @param reward The reward of the current transition
+     * Q(s_t, a_t) = R_{t+1} + \gamma * max_{a}Q_{tar}(s_{t+1}, a)
+     *
+     * @param batchIdx   The index in the batch of the current transition
+     * @param reward     The reward of the current transition
      * @param isTerminal True if it's the last transition of the "game"
      * @return The estimated Q-Value
      */

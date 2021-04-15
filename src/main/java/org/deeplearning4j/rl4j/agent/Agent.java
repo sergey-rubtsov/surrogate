@@ -15,34 +15,24 @@ import org.nd4j.common.base.Preconditions;
 import java.util.Map;
 
 public class Agent<ACTION> {
+    protected final AgentListenerList<ACTION> listeners;
     @Getter
     private final String id;
-
     @Getter
     private final Environment<ACTION> environment;
-
     @Getter
     private final IPolicy<ACTION> policy;
-
     private final TransformProcess transformProcess;
-
-    protected final AgentListenerList<ACTION> listeners;
-
     private final Integer maxEpisodeSteps;
-
+    protected boolean canContinue;
     @Getter(AccessLevel.PROTECTED)
     private Observation observation;
-
     @Getter(AccessLevel.PROTECTED)
     private ACTION lastAction;
-
     @Getter
     private int episodeStepNumber;
-
     @Getter
     private double reward;
-
-    protected boolean canContinue;
 
     private Agent(Builder<ACTION> builder) {
         this.environment = builder.environment;
@@ -52,6 +42,10 @@ public class Agent<ACTION> {
         this.id = builder.id;
 
         listeners = buildListenerList();
+    }
+
+    public static <ACTION> Builder<ACTION> builder(@NonNull Environment<ACTION> environment, @NonNull TransformProcess transformProcess, @NonNull IPolicy<ACTION> policy) {
+        return new Builder<>(environment, transformProcess, policy);
     }
 
     protected AgentListenerList<ACTION> buildListenerList() {
@@ -84,7 +78,7 @@ public class Agent<ACTION> {
             performStep();
         }
 
-        if(!canContinue) {
+        if (!canContinue) {
             return;
         }
 
@@ -120,7 +114,7 @@ public class Agent<ACTION> {
         ACTION action = decideAction(observation);
 
         canContinue = listeners.notifyBeforeStep(this, observation, action);
-        if(!canContinue) {
+        if (!canContinue) {
             return;
         }
 
@@ -130,7 +124,7 @@ public class Agent<ACTION> {
         onAfterStep(stepResult);
 
         canContinue = listeners.notifyAfterStep(this, stepResult);
-        if(!canContinue) {
+        if (!canContinue) {
             return;
         }
 
@@ -155,7 +149,7 @@ public class Agent<ACTION> {
 
     protected void handleStepResult(StepResult stepResult) {
         observation = convertChannelDataToObservation(stepResult, episodeStepNumber + 1);
-        reward +=computeReward(stepResult);
+        reward += computeReward(stepResult);
     }
 
     protected Observation convertChannelDataToObservation(StepResult stepResult, int episodeStepNumberOfObs) {
@@ -172,10 +166,6 @@ public class Agent<ACTION> {
 
     protected void onBeforeStep() {
         // Do Nothing
-    }
-
-    public static <ACTION> Builder<ACTION> builder(@NonNull Environment<ACTION> environment, @NonNull TransformProcess transformProcess, @NonNull IPolicy<ACTION> policy) {
-        return new Builder<>(environment, transformProcess, policy);
     }
 
     public static class Builder<ACTION> {

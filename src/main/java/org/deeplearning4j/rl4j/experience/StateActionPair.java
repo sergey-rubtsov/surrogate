@@ -23,7 +23,6 @@ import org.deeplearning4j.rl4j.observation.Observation;
  * A simple experience container. Used by {@link StateActionExperienceHandler StateActionExperienceHandler}.
  *
  * @param <A> Action type
- *
  * @author Alexandre Boulanger
  */
 @AllArgsConstructor

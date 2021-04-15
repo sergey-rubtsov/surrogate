@@ -44,7 +44,7 @@ public class HistoryStackAssembler implements HistoryMergeAssembler {
 
         // stack the elements in result on the dimension 0
         INDArray result = Nd4j.create(newShape);
-        for(int i = 0; i < elements.length; ++i) {
+        for (int i = 0; i < elements.length; ++i) {
             result.putRow(i, elements[i]);
         }
         return result;

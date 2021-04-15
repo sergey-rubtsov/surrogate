@@ -24,7 +24,6 @@ import org.nd4j.linalg.api.ndarray.INDArray;
  * The base of all DQN based algorithms
  *
  * @author Alexandre Boulanger
- *
  */
 public abstract class BaseDQNAlgorithm extends BaseTDTargetAlgorithm {
 

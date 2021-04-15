@@ -25,7 +25,7 @@ import java.io.OutputStream;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/5/16.
- *
+ * <p>
  * Factorisation between ActorCritic and DQN neural net.
  * Useful for AsyncLearning and Thread code.
  */
@@ -54,19 +54,22 @@ public interface NeuralNet<NN extends NeuralNet> {
 
     /**
      * clone the Neural Net with the same paramaeters
+     *
      * @return the cloned neural net
      */
     NN clone();
 
     /**
      * copy the parameters from a neural net
+     *
      * @param from where to copy parameters
      */
     void copy(NN from);
 
     /**
      * Calculate the gradients from input and label (target) of all outputs
-     * @param input input batch
+     *
+     * @param input  input batch
      * @param labels target batch
      * @return the gradients
      */
@@ -74,13 +77,15 @@ public interface NeuralNet<NN extends NeuralNet> {
 
     /**
      * fit from input and labels
-     * @param input input batch
+     *
+     * @param input  input batch
      * @param labels target batch
      */
     void fit(INDArray input, INDArray[] labels);
 
     /**
      * update the params from the gradients and the batchSize
+     *
      * @param gradients gradients to apply the gradient from
      * @param batchSize batchSize from which the gradient was calculated on (similar to nstep)
      */
@@ -89,18 +94,21 @@ public interface NeuralNet<NN extends NeuralNet> {
 
     /**
      * latest score from lastest fit
+     *
      * @return latest score
      */
     double getLatestScore();
 
     /**
      * save the neural net into an OutputStream
+     *
      * @param os OutputStream to save in
      */
     void save(OutputStream os) throws IOException;
 
     /**
      * save the neural net into a filename
+     *
      * @param filename filename to save in
      */
     void save(String filename) throws IOException;

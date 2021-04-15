@@ -41,7 +41,7 @@ import static org.bytedeco.opencv.global.opencv_imgproc.resize;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 7/27/16.
- *
+ * <p>
  * An IHistoryProcessor implementation using JavaCV
  */
 @Slf4j
@@ -49,7 +49,7 @@ public class HistoryProcessor implements IHistoryProcessor {
 
     @Getter
     final private Configuration conf;
-    private CircularFifoQueue<INDArray> history;
+    private final CircularFifoQueue<INDArray> history;
     private VideoRecorder videoRecorder;
 
     public HistoryProcessor(Configuration conf) {
@@ -64,7 +64,7 @@ public class HistoryProcessor implements IHistoryProcessor {
     }
 
     public void startMonitor(String filename, int[] shape) {
-        if(videoRecorder == null) {
+        if (videoRecorder == null) {
             videoRecorder = VideoRecorder.builder(shape[1], shape[2])
                     .build();
         }
@@ -77,7 +77,7 @@ public class HistoryProcessor implements IHistoryProcessor {
     }
 
     public void stopMonitor() {
-        if(videoRecorder != null) {
+        if (videoRecorder != null) {
             try {
                 videoRecorder.stopRecording();
             } catch (Exception e) {
@@ -91,7 +91,7 @@ public class HistoryProcessor implements IHistoryProcessor {
     }
 
     public void record(INDArray pixelArray) {
-        if(isMonitoring()) {
+        if (isMonitoring()) {
             // before accessing the raw pointer, we need to make sure that array is actual on the host side
             Nd4j.getAffinityManager().ensureLocation(pixelArray, AffinityManager.Location.HOST);
 
@@ -118,7 +118,7 @@ public class HistoryProcessor implements IHistoryProcessor {
         // before accessing the raw pointer, we need to make sure that array is actual on the host side
         Nd4j.getAffinityManager().ensureLocation(raw, AffinityManager.Location.HOST);
 
-        Mat ocvmat = new Mat((int)shape[0], (int)shape[1], CV_32FC(3), raw.data().pointer());
+        Mat ocvmat = new Mat((int) shape[0], (int) shape[1], CV_32FC(3), raw.data().pointer());
         Mat cvmat = new Mat(shape[0], shape[1], CV_8UC(3));
         ocvmat.convertTo(cvmat, CV_8UC(3), 255.0, 0.0);
         cvtColor(cvmat, cvmat, COLOR_RGB2GRAY);
@@ -128,7 +128,7 @@ public class HistoryProcessor implements IHistoryProcessor {
         //   waitKP();
         //Crop by croppingHeight, croppingHeight
         Mat cropped = resized.apply(new Rect(conf.getOffsetX(), conf.getOffsetY(), conf.getCroppingWidth(),
-                        conf.getCroppingHeight()));
+                conf.getCroppingHeight()));
         //System.out.println(conf.getCroppingWidth() + " " + cropped.data().asBuffer().array().length);
 
         INDArray out = null;

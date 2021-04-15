@@ -23,9 +23,13 @@ import java.io.IOException;
 public interface IDataManager {
 
     boolean isSaveData();
+
     String getVideoDir();
+
     void appendStat(StatEntry statEntry) throws IOException;
+
     void writeInfo(ILearning iLearning) throws IOException;
+
     void save(ILearning learning) throws IOException;
 
     //In order for jackson to serialize StatEntry

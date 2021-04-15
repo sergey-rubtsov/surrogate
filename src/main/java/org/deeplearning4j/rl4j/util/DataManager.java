@@ -53,7 +53,7 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/1/16.
- *
+ * <p>
  * This class handle the recording of one training.
  * It creates the directory rl4j-data if it does not exist,
  * the folder for every training and handle every path and model savings
@@ -108,8 +108,8 @@ public class DataManager implements IDataManager {
                 zipfile.putNextEntry(dqn);
 
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                if(learning instanceof NeuralNetFetchable) {
-                    ((NeuralNetFetchable)learning).getNeuralNet().save(bos);
+                if (learning instanceof NeuralNetFetchable) {
+                    ((NeuralNetFetchable) learning).getNeuralNet().save(bos);
                 }
                 bos.flush();
                 bos.close();
@@ -119,7 +119,7 @@ public class DataManager implements IDataManager {
             } catch (UnsupportedOperationException e) {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 ByteArrayOutputStream bos2 = new ByteArrayOutputStream();
-                ((IActorCritic)((NeuralNetFetchable)learning).getNeuralNet()).save(bos, bos2);
+                ((IActorCritic) ((NeuralNetFetchable) learning).getNeuralNet()).save(bos, bos2);
 
                 bos.flush();
                 bos.close();
@@ -141,8 +141,8 @@ public class DataManager implements IDataManager {
                 zipfile.putNextEntry(hpconf);
 
                 ByteArrayOutputStream bos2 = new ByteArrayOutputStream();
-                if(learning instanceof NeuralNetFetchable) {
-                    ((NeuralNetFetchable)learning).getNeuralNet().save(bos2);
+                if (learning instanceof NeuralNetFetchable) {
+                    ((NeuralNetFetchable) learning).getNeuralNet().save(bos2);
                 }
                 bos2.flush();
                 bos2.close();
@@ -278,7 +278,7 @@ public class DataManager implements IDataManager {
         Path infoPath = Paths.get(getInfo());
 
         Info info = new Info(iLearning.getClass().getSimpleName(), iLearning.getMdp().getClass().getSimpleName(),
-                        iLearning.getConfiguration(), iLearning.getStepCount(), System.currentTimeMillis());
+                iLearning.getConfiguration(), iLearning.getStepCount(), System.currentTimeMillis());
         String toWrite = toJson(info);
 
         Files.write(infoPath, toWrite.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
@@ -301,12 +301,12 @@ public class DataManager implements IDataManager {
             return;
 
         save(getModelDir() + "/" + learning.getStepCount() + ".training", learning);
-        if(learning instanceof  NeuralNetFetchable) {
+        if (learning instanceof NeuralNetFetchable) {
             try {
-                ((NeuralNetFetchable)learning).getNeuralNet().save(getModelDir() + "/" + learning.getStepCount() + ".model");
+                ((NeuralNetFetchable) learning).getNeuralNet().save(getModelDir() + "/" + learning.getStepCount() + ".model");
             } catch (UnsupportedOperationException e) {
                 String path = getModelDir() + "/" + learning.getStepCount();
-                ((IActorCritic)((NeuralNetFetchable)learning).getNeuralNet()).save(path + "_value.model", path + "_policy.model");
+                ((IActorCritic) ((NeuralNetFetchable) learning).getNeuralNet()).save(path + "_value.model", path + "_policy.model");
             }
         }
 

@@ -49,19 +49,19 @@ public class DQNFactoryStdConv implements DQNFactory {
 
     NetworkConfiguration conf;
 
-    public DQN buildDQN(int shapeInputs[], int numOutputs) {
+    public DQN buildDQN(int[] shapeInputs, int numOutputs) {
 
         if (shapeInputs.length == 1)
             throw new AssertionError("Impossible to apply convolutional layer on a shape == 1");
 
 
         NeuralNetConfiguration.ListBuilder confB = new NeuralNetConfiguration.Builder().seed(Constants.NEURAL_NET_SEED)
-                        .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-                        .l2(conf.getL2())
-                        .updater(conf.getUpdater() != null ? conf.getUpdater() : new Adam())
-                        .weightInit(WeightInit.XAVIER).l2(conf.getL2()).list()
-                        .layer(0, new ConvolutionLayer.Builder(8, 8).nIn(shapeInputs[0]).nOut(16).stride(4, 4)
-                                        .activation(Activation.RELU).build());
+                .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
+                .l2(conf.getL2())
+                .updater(conf.getUpdater() != null ? conf.getUpdater() : new Adam())
+                .weightInit(WeightInit.XAVIER).l2(conf.getL2()).list()
+                .layer(0, new ConvolutionLayer.Builder(8, 8).nIn(shapeInputs[0]).nOut(16).stride(4, 4)
+                        .activation(Activation.RELU).build());
 
 
         confB.layer(1, new ConvolutionLayer.Builder(4, 4).nOut(32).stride(2, 2).activation(Activation.RELU).build());
@@ -69,7 +69,7 @@ public class DQNFactoryStdConv implements DQNFactory {
         confB.layer(2, new DenseLayer.Builder().nOut(256).activation(Activation.RELU).build());
 
         confB.layer(3, new OutputLayer.Builder(LossFunctions.LossFunction.MSE).activation(Activation.IDENTITY).nOut(numOutputs)
-                        .build());
+                .build());
 
         confB.setInputType(InputType.convolutional(shapeInputs[1], shapeInputs[2], shapeInputs[0]));
         MultiLayerConfiguration mlnconf = confB.build();

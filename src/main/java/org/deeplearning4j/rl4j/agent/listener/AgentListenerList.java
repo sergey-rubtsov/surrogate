@@ -12,6 +12,7 @@ public class AgentListenerList<ACTION> {
 
     /**
      * Add a listener at the end of the list
+     *
      * @param listener The listener to be added
      */
     public void add(AgentListener<ACTION> listener) {

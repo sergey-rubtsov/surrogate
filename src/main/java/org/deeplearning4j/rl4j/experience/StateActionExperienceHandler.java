@@ -25,7 +25,6 @@ import java.util.List;
  * Note: Calling {@link StateActionExperienceHandler#generateTrainingBatch() generateTrainingBatch()} will clear the stored experiences
  *
  * @param <A> Action type
- *
  * @author Alexandre Boulanger
  */
 public class StateActionExperienceHandler<A> implements ExperienceHandler<A, StateActionPair<A>> {

@@ -14,20 +14,21 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ******************************************************************************/
-package org.surrogate.cartpole.toy;
+package org.surrogate.env.cartpole;
 
 import org.deeplearning4j.rl4j.learning.async.a3c.discrete.A3CDiscrete;
 import org.deeplearning4j.rl4j.learning.async.a3c.discrete.A3CDiscreteDense;
-import org.deeplearning4j.rl4j.mdp.toy.HardDeteministicToy;
-import org.deeplearning4j.rl4j.mdp.toy.HardToyState;
+import org.deeplearning4j.rl4j.mdp.MDP;
 import org.deeplearning4j.rl4j.network.ac.ActorCriticFactorySeparateStdDense;
 import org.deeplearning4j.rl4j.policy.ACPolicy;
+import org.deeplearning4j.rl4j.space.Box;
+import org.deeplearning4j.rl4j.space.DiscreteSpace;
 import org.nd4j.linalg.learning.config.Adam;
 
 import java.io.IOException;
 import java.util.logging.Logger;
 
-public class A3CToy {
+public class A3CTest {
 
     public static void main(String[] args) throws IOException {
         A3CSimple();
@@ -35,15 +36,15 @@ public class A3CToy {
 
     private static void A3CSimple() throws IOException {
         //define the mdp from gym (name, render)
-        HardDeteministicToy mdp = new HardDeteministicToy();
+        MDP<Box, Integer, DiscreteSpace> mdp = new CartpoleNative(1);
 
         A3CDiscrete.A3CConfiguration CARTPOLE_A3C =
             A3CDiscrete.A3CConfiguration.builder()
                 .seed(123)
-                .maxEpochStep(1)
-                .maxStep(18)
-                .numThread(1)
-                .nstep(18)
+                .maxEpochStep(200)
+                .maxStep(5000)
+                .numThread(3)
+                .nstep(20)
                 .updateStart(10)
                 .rewardFactor(0.01)
                 .gamma(0.99)
@@ -59,24 +60,28 @@ public class A3CToy {
             .build();
 
         //define the training
-        A3CDiscreteDense<HardToyState> a3c = new A3CDiscreteDense<>(mdp, CARTPOLE_NET_A3C, CARTPOLE_A3C);
+        A3CDiscreteDense<Box> a3c = new A3CDiscreteDense<Box>(mdp, CARTPOLE_NET_A3C, CARTPOLE_A3C);
 
         a3c.train(); //start the training
         mdp.close();
 
-        ACPolicy<HardToyState> pol = a3c.getPolicy();
+        ACPolicy<Box> pol = a3c.getPolicy();
 
-        pol.save("/tmp/toyval1/", "/tmp/toypol1");
+        pol.save("/tmp/simpleval1/", "/tmp/simplepol1");
 
         //reload the policy, will be equal to "pol", but without the randomness
-        ACPolicy<HardToyState> pol2 = ACPolicy.load("/tmp/toyval1/", "/tmp/simplepol1");
+        ACPolicy<Box> pol2 = ACPolicy.load("/tmp/simpleval1/", "/tmp/simplepol1");
         loadPolicy(pol2);
         System.out.println("sample finished.");
     }
 
     // pass in a generic policy and endID to allow access from other samples in this package..
-    static void loadPolicy(ACPolicy<HardToyState> pol) {
-        HardDeteministicToy mdp2 = new HardDeteministicToy();
+    static void loadPolicy(ACPolicy<Box> pol) {
+        //use the trained agent on a new similar mdp (but render it this time)
+
+        //define the mdp from gym (name, render)
+        CartpoleNative mdp2 = new CartpoleNative(1);
+
         //evaluate the agent
         double rewards = 0;
         for (int i = 0; i < 10; i++) {
@@ -85,6 +90,7 @@ public class A3CToy {
             rewards += reward;
             Logger.getAnonymousLogger().info("Reward: " + reward);
         }
+
         Logger.getAnonymousLogger().info("average: " + rewards/1000);
         mdp2.close();
     }

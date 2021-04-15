@@ -25,12 +25,12 @@ import java.util.List;
  * The interface of all TD target calculation algorithms.
  *
  * @param <A> The type of actions
- *
  * @author Alexandre Boulanger
  */
 public interface ITDTargetAlgorithm<A> {
     /**
      * Compute the updated estimated Q-Values for every transition
+     *
      * @param transitions The transitions from the experience replay
      * @return A DataSet where every element is the observation and the estimated Q-Values for all actions
      */

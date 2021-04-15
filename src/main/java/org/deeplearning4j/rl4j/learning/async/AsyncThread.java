@@ -43,7 +43,7 @@ import org.nd4j.linalg.factory.Nd4j;
 /**
  * This represent a local thread that explore the environment
  * and calculate a gradient to enqueue to the global thread/model
- *
+ * <p>
  * It has its own version of a model that it syncs at the start of every
  * sub epoch
  *
@@ -52,50 +52,45 @@ import org.nd4j.linalg.factory.Nd4j;
  */
 @Slf4j
 public abstract class AsyncThread<OBSERVATION extends Encodable, ACTION, ACTION_SPACE extends ActionSpace<ACTION>, NN extends NeuralNet>
-                extends Thread implements IEpochTrainer {
-
-    @Getter
-    private int threadNumber;
+        extends Thread implements IEpochTrainer {
 
     @Getter
     protected final int deviceNum;
-
+    private final LegacyMDPWrapper<OBSERVATION, ACTION, ACTION_SPACE> mdp;
+    private final TrainingListenerList listeners;
     /**
      * The number of steps that this async thread has produced
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     protected int stepCount = 0;
-
     /**
      * The number of epochs (updates) that this thread has sent to the global learner
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     protected int epochCount = 0;
-
     /**
      * The number of environment episodes that have been played out
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     protected int episodeCount = 0;
-
     /**
      * The number of steps in the current episode
      */
     @Getter
     protected int currentEpisodeStepCount = 0;
-
     /**
      * If the current episode needs to be reset
      */
     boolean episodeComplete = true;
-
-    @Getter @Setter
+    @Getter
+    private final int threadNumber;
+    @Getter
+    @Setter
     private IHistoryProcessor historyProcessor;
-
-    private boolean isEpisodeStarted = false;
-    private final LegacyMDPWrapper<OBSERVATION, ACTION, ACTION_SPACE> mdp;
-
-    private final TrainingListenerList listeners;
+    private final boolean isEpisodeStarted = false;
 
     public AsyncThread(MDP<OBSERVATION, ACTION, ACTION_SPACE> mdp, TrainingListenerList listeners, int threadNumber, int deviceNum) {
         this.mdp = new LegacyMDPWrapper<OBSERVATION, ACTION, ACTION_SPACE>(mdp, null);
@@ -107,6 +102,7 @@ public abstract class AsyncThread<OBSERVATION extends Encodable, ACTION, ACTION_
     public MDP<OBSERVATION, ACTION, ACTION_SPACE> getMdp() {
         return mdp.getWrappedMDP();
     }
+
     protected LegacyMDPWrapper<OBSERVATION, ACTION, ACTION_SPACE> getLegacyMDPWrapper() {
         return mdp;
     }
@@ -164,17 +160,17 @@ public abstract class AsyncThread<OBSERVATION extends Encodable, ACTION, ACTION_
                 startEpisode(context);
             }
 
-            if(!startEpoch(context)) {
+            if (!startEpoch(context)) {
                 break;
             }
 
             episodeComplete = handleTraining(context);
 
-            if(!finishEpoch(context)) {
+            if (!finishEpoch(context)) {
                 break;
             }
 
-            if(episodeComplete) {
+            if (episodeComplete) {
                 finishEpisode(context);
             }
         }
@@ -203,7 +199,7 @@ public abstract class AsyncThread<OBSERVATION extends Encodable, ACTION, ACTION_
 
     private void startEpisode(RunContext context) {
         getCurrent().reset();
-        Learning.InitMdp<Observation>  initMdp = refacInitMdp();
+        Learning.InitMdp<Observation> initMdp = refacInitMdp();
 
         context.obs = initMdp.getLastObs();
         context.rewards = initMdp.getReward();

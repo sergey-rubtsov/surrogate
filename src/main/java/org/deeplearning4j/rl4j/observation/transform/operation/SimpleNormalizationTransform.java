@@ -33,7 +33,7 @@ public class SimpleNormalizationTransform implements Operation<INDArray, INDArra
 
     @Override
     public INDArray transform(INDArray input) {
-        if(offset != 0.0) {
+        if (offset != 0.0) {
             input.subi(offset);
         }
 

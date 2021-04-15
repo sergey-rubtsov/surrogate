@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/9/16.
- *
+ * <p>
  * A toy MDP where the agent should find the maximum to get the reward.
  * Useful to debug as it's very fast to run
  */
@@ -42,9 +42,9 @@ public class HardDeteministicToy implements MDP<HardToyState, Integer, DiscreteS
     final private static int ACTION_SIZE = 10;
     final private static HardToyState[] states = genToyStates(MAX_STEP, SEED);
     @Getter
-    private DiscreteSpace actionSpace = new DiscreteSpace(ACTION_SIZE);
+    private final DiscreteSpace actionSpace = new DiscreteSpace(ACTION_SIZE);
     @Getter
-    private ObservationSpace<HardToyState> observationSpace = new ArrayObservationSpace(new int[] {ACTION_SIZE});
+    private final ObservationSpace<HardToyState> observationSpace = new ArrayObservationSpace(new int[]{ACTION_SIZE});
     private HardToyState hardToyState;
 
     public static void printTest(IDQN idqn) {
@@ -85,7 +85,8 @@ public class HardDeteministicToy implements MDP<HardToyState, Integer, DiscreteS
         return hardToyStates;
     }
 
-    public void close() {}
+    public void close() {
+    }
 
     @Override
     public boolean isDone() {

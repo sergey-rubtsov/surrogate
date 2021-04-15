@@ -45,6 +45,7 @@ public class AsyncNStepQLearningDiscreteConv<OBSERVATION extends Encodable> exte
         this(mdp, dqn, hpconf, conf);
         addListener(new DataManagerTrainingListener(dataManager));
     }
+
     public AsyncNStepQLearningDiscreteConv(MDP<OBSERVATION, Integer, DiscreteSpace> mdp, IDQN dqn,
                                            HistoryProcessor.Configuration hpconf, AsyncQLearningConfiguration conf) {
         super(mdp, dqn, conf);
@@ -57,6 +58,7 @@ public class AsyncNStepQLearningDiscreteConv<OBSERVATION extends Encodable> exte
                                            HistoryProcessor.Configuration hpconf, AsyncQLearningConfiguration conf, IDataManager dataManager) {
         this(mdp, factory.buildDQN(hpconf.getShape(), mdp.getActionSpace().getSize()), hpconf, conf, dataManager);
     }
+
     public AsyncNStepQLearningDiscreteConv(MDP<OBSERVATION, Integer, DiscreteSpace> mdp, DQNFactory factory,
                                            HistoryProcessor.Configuration hpconf, AsyncQLearningConfiguration conf) {
         this(mdp, factory.buildDQN(hpconf.getShape(), mdp.getActionSpace().getSize()), hpconf, conf);
@@ -67,6 +69,7 @@ public class AsyncNStepQLearningDiscreteConv<OBSERVATION extends Encodable> exte
                                            HistoryProcessor.Configuration hpconf, AsyncQLearningConfiguration conf, IDataManager dataManager) {
         this(mdp, new DQNFactoryStdConv(netConf), hpconf, conf, dataManager);
     }
+
     public AsyncNStepQLearningDiscreteConv(MDP<OBSERVATION, Integer, DiscreteSpace> mdp, NetworkConfiguration netConf,
                                            HistoryProcessor.Configuration hpconf, AsyncQLearningConfiguration conf) {
         this(mdp, new DQNFactoryStdConv(netConf), hpconf, conf);

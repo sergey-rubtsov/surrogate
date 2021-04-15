@@ -34,7 +34,7 @@ public class DataManagerTrainingListener implements TrainingListener {
     @Override
     public ListenerResponse onNewEpoch(IEpochTrainer trainer) {
         IHistoryProcessor hp = trainer.getHistoryProcessor();
-        if(hp != null) {
+        if (hp != null) {
             int[] shape = trainer.getMdp().getObservationSpace().getShape();
             String filename = dataManager.getVideoDir() + "/video-";
             if (trainer instanceof AsyncThread) {
@@ -50,7 +50,7 @@ public class DataManagerTrainingListener implements TrainingListener {
     @Override
     public ListenerResponse onEpochTrainingResult(IEpochTrainer trainer, IDataManager.StatEntry statEntry) {
         IHistoryProcessor hp = trainer.getHistoryProcessor();
-        if(hp != null) {
+        if (hp != null) {
             hp.stopMonitor();
         }
         try {

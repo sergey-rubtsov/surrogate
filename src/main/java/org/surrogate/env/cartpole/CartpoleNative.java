@@ -1,4 +1,4 @@
-package org.surrogate.cartpole.cartpole;
+package org.surrogate.env.cartpole;
 
 import lombok.Getter;
 import lombok.Setter;

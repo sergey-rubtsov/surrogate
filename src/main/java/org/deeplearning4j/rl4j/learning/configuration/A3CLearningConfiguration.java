@@ -38,7 +38,7 @@ public class A3CLearningConfiguration extends LearningConfiguration implements I
 
     /**
      * The frequency of async training iterations to update the target network.
-     *
+     * <p>
      * If this is set to -1 then the target network is updated after every training iteration
      */
     @Builder.Default

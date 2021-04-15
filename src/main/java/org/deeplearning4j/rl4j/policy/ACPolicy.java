@@ -30,7 +30,7 @@ import java.io.IOException;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/5/16.
- *
+ * <p>
  * A stochastic policy thats explore the environment based on
  * the softmax output of the actor critic, but objects constructed
  * with a {@link Random} argument of null return the max only.
@@ -43,6 +43,7 @@ public class ACPolicy<OBSERVATION extends Encodable> extends Policy<Integer> {
     public ACPolicy(IActorCritic actorCritic) {
         this(actorCritic, Nd4j.getRandom());
     }
+
     public ACPolicy(IActorCritic actorCritic, Random rnd) {
         this.actorCritic = actorCritic;
         this.rnd = rnd;
@@ -51,6 +52,7 @@ public class ACPolicy<OBSERVATION extends Encodable> extends Policy<Integer> {
     public static <OBSERVATION extends Encodable> ACPolicy<OBSERVATION> load(String path) throws IOException {
         return new ACPolicy<>(ActorCriticCompGraph.load(path));
     }
+
     public static <OBSERVATION extends Encodable> ACPolicy<OBSERVATION> load(String path, Random rnd) throws IOException {
         return new ACPolicy<>(ActorCriticCompGraph.load(path), rnd);
     }
@@ -58,6 +60,7 @@ public class ACPolicy<OBSERVATION extends Encodable> extends Policy<Integer> {
     public static <OBSERVATION extends Encodable> ACPolicy<OBSERVATION> load(String pathValue, String pathPolicy) throws IOException {
         return new ACPolicy<>(ActorCriticSeparate.load(pathValue, pathPolicy));
     }
+
     public static <OBSERVATION extends Encodable> ACPolicy<OBSERVATION> load(String pathValue, String pathPolicy, Random rnd) throws IOException {
         return new ACPolicy<>(ActorCriticSeparate.load(pathValue, pathPolicy), rnd);
     }

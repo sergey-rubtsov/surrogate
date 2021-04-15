@@ -26,9 +26,9 @@ import java.util.ArrayList;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) 7/12/16.
- *
+ * <p>
  * "Standard" Exp Replay implementation that uses a CircularFifoQueue
- *
+ * <p>
  * The memory is optimised by using array of INDArray in the transitions
  * such that two same INDArrays are not allocated twice
  */
@@ -39,7 +39,7 @@ public class ExpReplay<A> implements IExpReplay<A> {
     final private Random rnd;
 
     //Implementing this as a circular buffer queue
-    private CircularFifoQueue<Transition<A>> storage;
+    private final CircularFifoQueue<Transition<A>> storage;
 
     public ExpReplay(int maxSize, int batchSize, Random rnd) {
         this.batchSize = batchSize;
@@ -54,16 +54,16 @@ public class ExpReplay<A> implements IExpReplay<A> {
 
         int[] actualIndex = new int[actualBatchSize];
         IntSet set = new IntOpenHashSet();
-        for( int i=0; i<actualBatchSize; i++ ){
+        for (int i = 0; i < actualBatchSize; i++) {
             int next = rnd.nextInt(storageSize);
-            while(set.contains(next)){
+            while (set.contains(next)) {
                 next = rnd.nextInt(storageSize);
             }
             set.add(next);
             actualIndex[i] = next;
         }
 
-        for (int i = 0; i < actualBatchSize; i ++) {
+        for (int i = 0; i < actualBatchSize; i++) {
             Transition<A> trans = storage.get(actualIndex[i]);
             batch.add(trans.dup());
         }

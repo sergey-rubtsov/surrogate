@@ -32,7 +32,7 @@ import org.nd4j.linalg.factory.Nd4j;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) 7/18/16.
- *
+ * <p>
  * A toy MDP where reward are given in every case.
  * Useful to debug
  */
@@ -41,9 +41,9 @@ public class SimpleToy implements MDP<SimpleToyState, Integer, DiscreteSpace> {
 
     final private int maxStep;
     @Getter
-    private DiscreteSpace actionSpace = new DiscreteSpace(2);
+    private final DiscreteSpace actionSpace = new DiscreteSpace(2);
     @Getter
-    private ObservationSpace<SimpleToyState> observationSpace = new ArrayObservationSpace(new int[] {1});
+    private final ObservationSpace<SimpleToyState> observationSpace = new ArrayObservationSpace(new int[]{1});
     private SimpleToyState simpleToyState;
     @Setter
     private NeuralNetFetchable<IDQN> fetchable;
@@ -61,7 +61,8 @@ public class SimpleToy implements MDP<SimpleToyState, Integer, DiscreteSpace> {
         log.info(output.toString());
     }
 
-    public void close() {}
+    public void close() {
+    }
 
     @Override
     public boolean isDone() {

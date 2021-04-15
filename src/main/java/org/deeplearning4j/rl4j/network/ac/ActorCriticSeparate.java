@@ -47,13 +47,13 @@ public class ActorCriticSeparate<NN extends ActorCriticSeparate> implements IAct
         this.recurrent = valueNet.getOutputLayer() instanceof RnnOutputLayer;
     }
 
-    public NeuralNetwork[] getNeuralNetworks() {
-        return new NeuralNetwork[] { valueNet, policyNet };
-    }
-
     public static ActorCriticSeparate load(String pathValue, String pathPolicy) throws IOException {
         return new ActorCriticSeparate(ModelSerializer.restoreMultiLayerNetwork(pathValue),
-                                       ModelSerializer.restoreMultiLayerNetwork(pathPolicy));
+                ModelSerializer.restoreMultiLayerNetwork(pathPolicy));
+    }
+
+    public NeuralNetwork[] getNeuralNetworks() {
+        return new NeuralNetwork[]{valueNet, policyNet};
     }
 
     public void reset() {
@@ -73,14 +73,14 @@ public class ActorCriticSeparate<NN extends ActorCriticSeparate> implements IAct
 
     public INDArray[] outputAll(INDArray batch) {
         if (recurrent) {
-            return new INDArray[] {valueNet.rnnTimeStep(batch), policyNet.rnnTimeStep(batch)};
+            return new INDArray[]{valueNet.rnnTimeStep(batch), policyNet.rnnTimeStep(batch)};
         } else {
-            return new INDArray[] {valueNet.output(batch), policyNet.output(batch)};
+            return new INDArray[]{valueNet.output(batch), policyNet.output(batch)};
         }
     }
 
     public NN clone() {
-        NN nn = (NN)new ActorCriticSeparate(valueNet.clone(), policyNet.clone());
+        NN nn = (NN) new ActorCriticSeparate(valueNet.clone(), policyNet.clone());
         nn.valueNet.setListeners(valueNet.getListeners());
         nn.policyNet.setListeners(policyNet.getListeners());
         return nn;
@@ -98,7 +98,7 @@ public class ActorCriticSeparate<NN extends ActorCriticSeparate> implements IAct
         Collection<TrainingListener> valueIterationListeners = valueNet.getListeners();
         if (valueIterationListeners != null && valueIterationListeners.size() > 0) {
             for (TrainingListener l : valueIterationListeners) {
-                    l.onGradientCalculation(valueNet);
+                l.onGradientCalculation(valueNet);
             }
         }
 
@@ -111,7 +111,7 @@ public class ActorCriticSeparate<NN extends ActorCriticSeparate> implements IAct
                 l.onGradientCalculation(policyNet);
             }
         }
-        return new Gradient[] {valueNet.gradient(), policyNet.gradient()};
+        return new Gradient[]{valueNet.gradient(), policyNet.gradient()};
     }
 
 

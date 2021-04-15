@@ -22,11 +22,11 @@ import org.nd4j.linalg.factory.Nd4j;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 7/8/16.
- *         <p>
- *         A discrete space of action. A discrete space is always isomorphic
- *         to a space of integer so we can parametrize directly by Integer.
- *         Benefit of using Integers directly is that you can use it as the
- *         id of the node assigned to that action in the outpout of a DQN.
+ * <p>
+ * A discrete space of action. A discrete space is always isomorphic
+ * to a space of integer so we can parametrize directly by Integer.
+ * Benefit of using Integers directly is that you can use it as the
+ * id of the node assigned to that action in the outpout of a DQN.
  */
 public class DiscreteSpace implements ActionSpace<Integer> {
 

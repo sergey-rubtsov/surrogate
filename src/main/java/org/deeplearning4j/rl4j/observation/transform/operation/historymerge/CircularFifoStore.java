@@ -38,6 +38,7 @@ public class CircularFifoStore implements HistoryMergeElementStore {
 
     /**
      * Add an element to the store, if this addition would make the store to overflow, the new element replaces the oldest.
+     *
      * @param elem
      */
     @Override
@@ -60,6 +61,7 @@ public class CircularFifoStore implements HistoryMergeElementStore {
 
     /**
      * The CircularFifoStore needs to be completely filled before being ready.
+     *
      * @return false when the number of elements in the store is less than the store capacity (default is 4)
      */
     @Override

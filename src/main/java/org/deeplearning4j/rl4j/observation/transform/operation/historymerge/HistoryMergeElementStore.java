@@ -28,12 +28,14 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 public interface HistoryMergeElementStore {
     /**
      * Add an element into the store
+     *
      * @param observation
      */
     void add(INDArray observation);
 
     /**
      * Get the content of the store
+     *
      * @return the content of the store
      */
     INDArray[] get();
@@ -41,6 +43,7 @@ public interface HistoryMergeElementStore {
     /**
      * Used to tell the HistoryMergeTransform that the store is ready. The HistoryMergeTransform will tell the {@link TransformProcess TransformProcess}
      * to skip the observation is the store is not ready.
+     *
      * @return true if the store is ready
      */
     boolean isReady();

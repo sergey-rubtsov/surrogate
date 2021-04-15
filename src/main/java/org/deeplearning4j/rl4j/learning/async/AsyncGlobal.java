@@ -53,14 +53,10 @@ import java.util.concurrent.locks.ReentrantLock;
 public class AsyncGlobal<NN extends NeuralNet> implements IAsyncGlobal<NN> {
 
     final private NN current;
-
-    private NN target;
-
     final private IAsyncLearningConfiguration configuration;
-
     @Getter
     private final Lock updateLock;
-
+    private final NN target;
     /**
      * The number of times the gradient has been updated by worker threads
      */

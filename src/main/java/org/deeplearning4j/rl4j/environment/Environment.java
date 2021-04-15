@@ -4,8 +4,12 @@ import java.util.Map;
 
 public interface Environment<ACTION> {
     Schema<ACTION> getSchema();
+
     Map<String, Object> reset();
+
     StepResult step(ACTION action);
+
     boolean isEpisodeFinished();
+
     void close();
 }

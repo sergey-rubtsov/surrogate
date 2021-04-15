@@ -57,13 +57,6 @@ public class VideoRecorder implements AutoCloseable {
 
     private FFmpegFrameRecorder fmpegFrameRecorder = null;
 
-    /**
-     * @return True if the instance is recording a video
-     */
-    public boolean isRecording() {
-        return fmpegFrameRecorder != null;
-    }
-
     private VideoRecorder(Builder builder) {
         this.height = builder.height;
         this.width = builder.width;
@@ -73,7 +66,24 @@ public class VideoRecorder implements AutoCloseable {
     }
 
     /**
+     * @param height The height of the video
+     * @param width  Thw width of the video
+     * @return A VideoRecorder builder
+     */
+    public static Builder builder(int height, int width) {
+        return new Builder(height, width);
+    }
+
+    /**
+     * @return True if the instance is recording a video
+     */
+    public boolean isRecording() {
+        return fmpegFrameRecorder != null;
+    }
+
+    /**
      * Initiate the recording of a video
+     *
      * @param filename Name of the video file to create
      * @throws Exception
      */
@@ -89,6 +99,7 @@ public class VideoRecorder implements AutoCloseable {
 
     /**
      * Terminates the recording of the video
+     *
      * @throws Exception
      */
     public void stopRecording() throws Exception {
@@ -101,6 +112,7 @@ public class VideoRecorder implements AutoCloseable {
 
     /**
      * Add a frame to the video
+     *
      * @param imageArray the INDArray that contains the data to be recorded, the data must be in CHW format
      * @throws Exception
      */
@@ -110,20 +122,11 @@ public class VideoRecorder implements AutoCloseable {
 
     /**
      * Terminate the recording and close the video file
+     *
      * @throws Exception
      */
     public void close() throws Exception {
         stopRecording();
-    }
-
-    /**
-     *
-     * @param height The height of the video
-     * @param width Thw width of the video
-     * @return A VideoRecorder builder
-     */
-    public static Builder builder(int height, int width) {
-        return new Builder(height, width);
     }
 
     /**
@@ -138,7 +141,7 @@ public class VideoRecorder implements AutoCloseable {
 
         /**
          * @param height The height of the video
-         * @param width The width of the video
+         * @param width  The width of the video
          */
         public Builder(int height, int width) {
             this.height = height;
@@ -147,6 +150,7 @@ public class VideoRecorder implements AutoCloseable {
 
         /**
          * The codec to use for the video. Default is AV_CODEC_ID_H264
+         *
          * @param codec Code (see {@link org.bytedeco.ffmpeg.global.avcodec codec codes})
          */
         public Builder codec(int codec) {
@@ -156,6 +160,7 @@ public class VideoRecorder implements AutoCloseable {
 
         /**
          * The frame rate of the video. Default is 30.0
+         *
          * @param frameRate The frame rate
          * @return
          */
@@ -166,6 +171,7 @@ public class VideoRecorder implements AutoCloseable {
 
         /**
          * The video quality. Default is 30
+         *
          * @param videoQuality
          * @return
          */
@@ -176,6 +182,7 @@ public class VideoRecorder implements AutoCloseable {
 
         /**
          * Build an instance of the configured VideoRecorder
+         *
          * @return A VideoRecorder instance
          */
         public VideoRecorder build() {

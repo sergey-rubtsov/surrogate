@@ -38,6 +38,10 @@ public class Observation implements Encodable {
     @Getter
     private final INDArray data;
 
+    public Observation(INDArray data) {
+        this.data = data;
+    }
+
     @Override
     public double[] toArray() {
         return data.data().asDouble();
@@ -47,16 +51,13 @@ public class Observation implements Encodable {
         return data == null;
     }
 
-    public Observation(INDArray data) {
-        this.data = data;
-    }
-
     /**
      * Creates a duplicate instance of the current observation
+     *
      * @return
      */
     public Observation dup() {
-        if(data == null) {
+        if (data == null) {
             return SkippedObservation;
         }
 

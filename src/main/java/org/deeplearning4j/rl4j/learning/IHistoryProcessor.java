@@ -23,7 +23,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/6/16.
- *
+ * <p>
  * An IHistoryProcessor come directly from the atari DQN paper.
  * It applies pre-processing the pixels of one state (gray-scaling + resizing)
  * then stacks it in different channels to be fed to a conv net
@@ -32,8 +32,10 @@ public interface IHistoryProcessor {
 
     Configuration getConf();
 
-    /** Returns compressed arrays, which must be rescaled based
-     *  on the value returned by {@link #getScale()}. */
+    /**
+     * Returns compressed arrays, which must be rescaled based
+     * on the value returned by {@link #getScale()}.
+     */
     INDArray[] getHistory();
 
     void record(INDArray image);
@@ -46,24 +48,34 @@ public interface IHistoryProcessor {
 
     boolean isMonitoring();
 
-    /** Returns the scale of the arrays returned by {@link #getHistory()}, typically 255. */
+    /**
+     * Returns the scale of the arrays returned by {@link #getHistory()}, typically 255.
+     */
     double getScale();
 
     @AllArgsConstructor
     @Builder
     @Data
-    public static class Configuration {
-        @Builder.Default int historyLength = 4;
-        @Builder.Default int rescaledWidth = 84;
-        @Builder.Default int rescaledHeight = 84;
-        @Builder.Default int croppingWidth = 84;
-        @Builder.Default int croppingHeight = 84;
-        @Builder.Default int offsetX = 0;
-        @Builder.Default int offsetY = 0;
-        @Builder.Default int skipFrame = 4;
+    class Configuration {
+        @Builder.Default
+        int historyLength = 4;
+        @Builder.Default
+        int rescaledWidth = 84;
+        @Builder.Default
+        int rescaledHeight = 84;
+        @Builder.Default
+        int croppingWidth = 84;
+        @Builder.Default
+        int croppingHeight = 84;
+        @Builder.Default
+        int offsetX = 0;
+        @Builder.Default
+        int offsetY = 0;
+        @Builder.Default
+        int skipFrame = 4;
 
         public int[] getShape() {
-            return new int[] {getHistoryLength(), getRescaledHeight(), getRescaledWidth()};
+            return new int[]{getHistoryLength(), getRescaledHeight(), getRescaledWidth()};
         }
     }
 }

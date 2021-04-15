@@ -37,10 +37,9 @@ public abstract class BaseTDTargetAlgorithm implements ITDTargetAlgorithm<Intege
     private final boolean isClamped;
 
     /**
-     *
      * @param qNetworkSource The source of the Q-Network
-     * @param gamma The discount factor
-     * @param errorClamp Will prevent the new Q-Value from being farther than <i>errorClamp</i> away from the previous value. Double.NaN will disable the clamping.
+     * @param gamma          The discount factor
+     * @param errorClamp     Will prevent the new Q-Value from being farther than <i>errorClamp</i> away from the previous value. Double.NaN will disable the clamping.
      */
     protected BaseTDTargetAlgorithm(QNetworkSource qNetworkSource, double gamma, double errorClamp) {
         this.qNetworkSource = qNetworkSource;
@@ -51,10 +50,9 @@ public abstract class BaseTDTargetAlgorithm implements ITDTargetAlgorithm<Intege
     }
 
     /**
-     *
      * @param qNetworkSource The source of the Q-Network
-     * @param gamma The discount factor
-     * Note: Error clamping is disabled with this ctor
+     * @param gamma          The discount factor
+     *                       Note: Error clamping is disabled with this ctor
      */
     protected BaseTDTargetAlgorithm(QNetworkSource qNetworkSource, double gamma) {
         this(qNetworkSource, gamma, Double.NaN);
@@ -62,7 +60,8 @@ public abstract class BaseTDTargetAlgorithm implements ITDTargetAlgorithm<Intege
 
     /**
      * Called just before the calculation starts
-     * @param observations A INDArray of all observations stacked on dimension 0
+     *
+     * @param observations     A INDArray of all observations stacked on dimension 0
      * @param nextObservations A INDArray of all next observations stacked on dimension 0
      */
     protected void initComputation(INDArray observations, INDArray nextObservations) {
@@ -72,8 +71,8 @@ public abstract class BaseTDTargetAlgorithm implements ITDTargetAlgorithm<Intege
     /**
      * Compute the new estimated Q-Value for every transition in the batch
      *
-     * @param batchIdx The index in the batch of the current transition
-     * @param reward The reward of the current transition
+     * @param batchIdx   The index in the batch of the current transition
+     * @param reward     The reward of the current transition
      * @param isTerminal True if it's the last transition of the "game"
      * @return The estimated Q-Value
      */
@@ -95,7 +94,7 @@ public abstract class BaseTDTargetAlgorithm implements ITDTargetAlgorithm<Intege
             Transition<Integer> transition = transitions.get(i);
             double yTarget = computeTarget(i, transition.getReward(), transition.isTerminal());
 
-            if(isClamped) {
+            if (isClamped) {
                 double previousQValue = updatedQValues.getDouble(i, transition.getAction());
                 double lowBound = previousQValue - errorClamp;
                 double highBound = previousQValue + errorClamp;

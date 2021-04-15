@@ -29,22 +29,24 @@ import org.nd4j.linalg.factory.Nd4j;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 7/27/16.
- *
+ * <p>
  * Useful factorisations and helper methods for class inheriting
  * ILearning.
- *
+ * <p>
  * Big majority of training method should inherit this
- *
  */
 @Slf4j
 public abstract class Learning<OBSERVATION extends Encodable, A, AS extends ActionSpace<A>, NN extends NeuralNet>
-                implements ILearning<OBSERVATION, A, AS>, NeuralNetFetchable<NN> {
+        implements ILearning<OBSERVATION, A, AS>, NeuralNetFetchable<NN> {
 
-    @Getter @Setter
+    @Getter
+    @Setter
     protected int stepCount = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private int epochCount = 0;
-    @Getter @Setter
+    @Getter
+    @Setter
     private IHistoryProcessor historyProcessor = null;
 
     public static Integer getMaxAction(INDArray vector) {

@@ -24,7 +24,6 @@ import java.util.List;
  *
  * @param <A> Action type
  * @param <E> Experience type
- *
  * @author Alexandre Boulanger
  */
 public interface ExperienceHandler<A, E> {
@@ -32,6 +31,7 @@ public interface ExperienceHandler<A, E> {
 
     /**
      * Called when the episode is done with the last observation
+     *
      * @param observation
      */
     void setFinalObservation(Observation observation);
@@ -43,6 +43,7 @@ public interface ExperienceHandler<A, E> {
 
     /**
      * The elements are returned in the historical order (i.e. in the order they happened)
+     *
      * @return The list of experience elements
      */
     List<E> generateTrainingBatch();

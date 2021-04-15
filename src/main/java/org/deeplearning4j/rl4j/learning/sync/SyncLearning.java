@@ -41,6 +41,11 @@ public abstract class SyncLearning<OBSERVATION extends Encodable, ACTION, ACTION
         extends Learning<OBSERVATION, ACTION, ACTION_SPACE, NN> implements IEpochTrainer {
 
     private final TrainingListenerList listeners = new TrainingListenerList();
+    /**
+     * Number of epochs between calls to onTrainingProgress. Default is 5
+     */
+    @Getter
+    private int progressMonitorFrequency = 5;
 
     /**
      * Add a listener at the end of the listener list.
@@ -51,14 +56,8 @@ public abstract class SyncLearning<OBSERVATION extends Encodable, ACTION, ACTION
         listeners.add(listener);
     }
 
-    /**
-     * Number of epochs between calls to onTrainingProgress. Default is 5
-     */
-    @Getter
-    private int progressMonitorFrequency = 5;
-
     public void setProgressMonitorFrequency(int value) {
-        if(value == 0) throw new IllegalArgumentException("The progressMonitorFrequency cannot be 0");
+        if (value == 0) throw new IllegalArgumentException("The progressMonitorFrequency cannot be 0");
 
         progressMonitorFrequency = value;
     }
@@ -102,7 +101,7 @@ public abstract class SyncLearning<OBSERVATION extends Encodable, ACTION, ACTION
 
                 postEpoch();
 
-                if(getEpochCount() % progressMonitorFrequency == 0) {
+                if (getEpochCount() % progressMonitorFrequency == 0) {
                     canContinue = listeners.notifyTrainingProgress(this);
                     if (!canContinue) {
                         break;

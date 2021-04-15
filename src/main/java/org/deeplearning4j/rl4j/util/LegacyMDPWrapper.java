@@ -64,7 +64,7 @@ public class LegacyMDPWrapper<OBSERVATION extends Encodable, A, AS extends Actio
     private void createTransformProcess() {
         IHistoryProcessor historyProcessor = getHistoryProcessor();
 
-        if(historyProcessor != null && shape.length == 3) {
+        if (historyProcessor != null && shape.length == 3) {
             int skipFrame = historyProcessor.getConf().getSkipFrame();
             int frameStackLength = historyProcessor.getConf().getHistoryLength();
 
@@ -89,8 +89,7 @@ public class LegacyMDPWrapper<OBSERVATION extends Encodable, A, AS extends Actio
                             .isFirstDimenstionBatch(true)
                             .build(frameStackLength))
                     .build("data");
-        }
-        else {
+        } else {
             transformProcess = TransformProcess.builder()
                     .transform("data", new EncodableToINDArrayTransform())
                     .build("data");
@@ -109,7 +108,7 @@ public class LegacyMDPWrapper<OBSERVATION extends Encodable, A, AS extends Actio
         OBSERVATION rawResetResponse = wrappedMDP.reset();
         record(rawResetResponse);
 
-        if(historyProcessor != null) {
+        if (historyProcessor != null) {
             skipFrame = historyProcessor.getConf().getSkipFrame();
         }
 
@@ -124,14 +123,14 @@ public class LegacyMDPWrapper<OBSERVATION extends Encodable, A, AS extends Actio
         StepReply<OBSERVATION> rawStepReply = wrappedMDP.step(a);
         INDArray rawObservation = getInput(rawStepReply.getObservation());
 
-        if(historyProcessor != null) {
+        if (historyProcessor != null) {
             historyProcessor.record(rawObservation);
         }
 
         int stepOfObservation = steps++;
 
         Map<String, Object> channelsData = buildChannelsData(rawStepReply.getObservation());
-        Observation observation =  transformProcess.transform(channelsData, stepOfObservation, rawStepReply.isDone());
+        Observation observation = transformProcess.transform(channelsData, stepOfObservation, rawStepReply.isDone());
 
         return new StepReply<Observation>(observation, rawStepReply.getReward(), rawStepReply.isDone(), rawStepReply.getInfo());
     }
@@ -140,7 +139,7 @@ public class LegacyMDPWrapper<OBSERVATION extends Encodable, A, AS extends Actio
         INDArray rawObservation = getInput(obs);
 
         IHistoryProcessor historyProcessor = getHistoryProcessor();
-        if(historyProcessor != null) {
+        if (historyProcessor != null) {
             historyProcessor.record(rawObservation);
         }
     }

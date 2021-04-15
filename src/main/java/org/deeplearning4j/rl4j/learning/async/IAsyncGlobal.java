@@ -41,6 +41,7 @@ public interface IAsyncGlobal<NN extends NeuralNet> {
 
     /**
      * Apply gradients to the global network
+     *
      * @param gradient
      * @param batchSize
      */

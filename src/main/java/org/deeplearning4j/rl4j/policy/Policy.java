@@ -29,9 +29,9 @@ import org.deeplearning4j.rl4j.util.LegacyMDPWrapper;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) 7/18/16.
- *
+ * <p>
  * Abstract class common to all policies
- *
+ * <p>
  * A Policy responsability is to choose the next action given a state
  */
 public abstract class Policy<A> implements IPolicy<A> {
@@ -41,7 +41,7 @@ public abstract class Policy<A> implements IPolicy<A> {
     public abstract A nextAction(Observation obs);
 
     public <O extends Encodable, AS extends ActionSpace<A>> double play(MDP<O, A, AS> mdp) {
-        return play(mdp, (IHistoryProcessor)null);
+        return play(mdp, (IHistoryProcessor) null);
     }
 
     public <O extends Encodable, AS extends ActionSpace<A>> double play(MDP<O, A, AS> mdp, HistoryProcessor.Configuration conf) {
@@ -84,6 +84,7 @@ public abstract class Policy<A> implements IPolicy<A> {
     protected void resetNetworks() {
         getNeuralNet().reset();
     }
+
     public void reset() {
         resetNetworks();
     }

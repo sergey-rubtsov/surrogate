@@ -37,8 +37,6 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/9/16.
- *
- *
  */
 @Value
 public class ActorCriticFactoryCompGraphStdDense implements ActorCriticFactoryCompGraph {
@@ -51,39 +49,39 @@ public class ActorCriticFactoryCompGraphStdDense implements ActorCriticFactoryCo
             nIn *= i;
         }
         ComputationGraphConfiguration.GraphBuilder confB =
-                        new NeuralNetConfiguration.Builder().seed(Constants.NEURAL_NET_SEED)
-                                        .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-                                        .updater(conf.getUpdater() != null ? conf.getUpdater() : new Adam())
-                                        .weightInit(WeightInit.XAVIER)
-                                        .l2(conf.getL2()).graphBuilder()
-                                        .setInputTypes(conf.isUseLSTM() ? InputType.recurrent(nIn)
-                                                        : InputType.feedForward(nIn)).addInputs("input")
-                                        .addLayer("0", new DenseLayer.Builder().nIn(nIn)
-                                                        .nOut(conf.getNumHiddenNodes()).activation(Activation.RELU).build(),
-                                                        "input");
+                new NeuralNetConfiguration.Builder().seed(Constants.NEURAL_NET_SEED)
+                        .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
+                        .updater(conf.getUpdater() != null ? conf.getUpdater() : new Adam())
+                        .weightInit(WeightInit.XAVIER)
+                        .l2(conf.getL2()).graphBuilder()
+                        .setInputTypes(conf.isUseLSTM() ? InputType.recurrent(nIn)
+                                : InputType.feedForward(nIn)).addInputs("input")
+                        .addLayer("0", new DenseLayer.Builder().nIn(nIn)
+                                        .nOut(conf.getNumHiddenNodes()).activation(Activation.RELU).build(),
+                                "input");
 
 
         for (int i = 1; i < conf.getNumLayers(); i++) {
             confB.addLayer(i + "", new DenseLayer.Builder().nIn(conf.getNumHiddenNodes()).nOut(conf.getNumHiddenNodes())
-                            .activation(Activation.RELU).build(), (i - 1) + "");
+                    .activation(Activation.RELU).build(), (i - 1) + "");
         }
 
 
         if (conf.isUseLSTM()) {
             confB.addLayer(getConf().getNumLayers() + "", new LSTM.Builder().activation(Activation.TANH)
-                            .nOut(conf.getNumHiddenNodes()).build(), (getConf().getNumLayers() - 1) + "");
+                    .nOut(conf.getNumHiddenNodes()).build(), (getConf().getNumLayers() - 1) + "");
 
             confB.addLayer("value", new RnnOutputLayer.Builder(LossFunctions.LossFunction.MSE).activation(Activation.IDENTITY)
-                            .nOut(1).build(), getConf().getNumLayers() + "");
+                    .nOut(1).build(), getConf().getNumLayers() + "");
 
             confB.addLayer("softmax", new RnnOutputLayer.Builder(new ActorCriticLoss()).activation(Activation.SOFTMAX)
-                            .nOut(numOutputs).build(), getConf().getNumLayers() + "");
+                    .nOut(numOutputs).build(), getConf().getNumLayers() + "");
         } else {
             confB.addLayer("value", new OutputLayer.Builder(LossFunctions.LossFunction.MSE).activation(Activation.IDENTITY)
-                            .nOut(1).build(), (getConf().getNumLayers() - 1) + "");
+                    .nOut(1).build(), (getConf().getNumLayers() - 1) + "");
 
             confB.addLayer("softmax", new OutputLayer.Builder(new ActorCriticLoss()).activation(Activation.SOFTMAX)
-                            .nOut(numOutputs).build(), (getConf().getNumLayers() - 1) + "");
+                    .nOut(numOutputs).build(), (getConf().getNumLayers() - 1) + "");
         }
 
         confB.setOutputs("value", "softmax");

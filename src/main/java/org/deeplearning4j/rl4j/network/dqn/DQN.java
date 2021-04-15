@@ -43,12 +43,12 @@ public class DQN<NN extends DQN> implements IDQN<NN> {
         this.mln = mln;
     }
 
-    public NeuralNetwork[] getNeuralNetworks() {
-        return new NeuralNetwork[] { mln };
-    }
-
     public static DQN load(String path) throws IOException {
         return new DQN(ModelSerializer.restoreMultiLayerNetwork(path));
+    }
+
+    public NeuralNetwork[] getNeuralNetworks() {
+        return new NeuralNetwork[]{mln};
     }
 
     public boolean isRecurrent() {
@@ -76,11 +76,11 @@ public class DQN<NN extends DQN> implements IDQN<NN> {
     }
 
     public INDArray[] outputAll(INDArray batch) {
-        return new INDArray[] {output(batch)};
+        return new INDArray[]{output(batch)};
     }
 
     public NN clone() {
-        NN nn = (NN)new DQN(mln.clone());
+        NN nn = (NN) new DQN(mln.clone());
         nn.mln.setListeners(mln.getListeners());
         return nn;
     }
@@ -100,7 +100,7 @@ public class DQN<NN extends DQN> implements IDQN<NN> {
             }
         }
         //System.out.println("SCORE: " + mln.score());
-        return new Gradient[] {mln.gradient()};
+        return new Gradient[]{mln.gradient()};
     }
 
     public Gradient[] gradient(INDArray input, INDArray[] labels) {

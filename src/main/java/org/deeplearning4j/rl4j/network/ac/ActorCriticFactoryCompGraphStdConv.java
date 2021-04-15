@@ -48,7 +48,7 @@ import java.util.Arrays;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/9/16.
- *
+ * <p>
  * Standard factory for Conv net Actor Critic
  */
 @Value
@@ -56,7 +56,7 @@ public class ActorCriticFactoryCompGraphStdConv implements ActorCriticFactoryCom
 
     ActorCriticNetworkConfiguration conf;
 
-    public ActorCriticCompGraph buildActorCritic(int shapeInputs[], int numOutputs) {
+    public ActorCriticCompGraph buildActorCritic(int[] shapeInputs, int numOutputs) {
 
         if (shapeInputs.length == 1)
             throw new AssertionError("Impossible to apply convolutional layer on a shape == 1");
@@ -65,15 +65,15 @@ public class ActorCriticFactoryCompGraphStdConv implements ActorCriticFactoryCom
         int w = (((shapeInputs[2] - 8) / 4 + 1) - 4) / 2 + 1;
 
         ComputationGraphConfiguration.GraphBuilder confB =
-                        new NeuralNetConfiguration.Builder().seed(Constants.NEURAL_NET_SEED)
-                                        .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-                                        .updater(conf.getUpdater() != null ? conf.getUpdater() : new Adam())
-                                        .weightInit(WeightInit.XAVIER)
-                                        .l2(conf.getL2()).graphBuilder()
-                                        .addInputs("input").addLayer("0",
-                                                        new ConvolutionLayer.Builder(8, 8).nIn(shapeInputs[0]).nOut(16)
-                                                                        .stride(4, 4).activation(Activation.RELU).build(),
-                                                        "input");
+                new NeuralNetConfiguration.Builder().seed(Constants.NEURAL_NET_SEED)
+                        .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
+                        .updater(conf.getUpdater() != null ? conf.getUpdater() : new Adam())
+                        .weightInit(WeightInit.XAVIER)
+                        .l2(conf.getL2()).graphBuilder()
+                        .addInputs("input").addLayer("0",
+                        new ConvolutionLayer.Builder(8, 8).nIn(shapeInputs[0]).nOut(16)
+                                .stride(4, 4).activation(Activation.RELU).build(),
+                        "input");
 
         confB.addLayer("1", new ConvolutionLayer.Builder(4, 4).nIn(16).nOut(32).stride(2, 2).activation(Activation.RELU).build(), "0");
 
@@ -83,16 +83,16 @@ public class ActorCriticFactoryCompGraphStdConv implements ActorCriticFactoryCom
             confB.addLayer("3", new LSTM.Builder().nIn(256).nOut(256).activation(Activation.TANH).build(), "2");
 
             confB.addLayer("value", new RnnOutputLayer.Builder(LossFunctions.LossFunction.MSE).activation(Activation.IDENTITY)
-                            .nIn(256).nOut(1).build(), "3");
+                    .nIn(256).nOut(1).build(), "3");
 
             confB.addLayer("softmax", new RnnOutputLayer.Builder(new ActorCriticLoss()).activation(Activation.SOFTMAX)
-                            .nIn(256).nOut(numOutputs).build(), "3");
+                    .nIn(256).nOut(numOutputs).build(), "3");
         } else {
             confB.addLayer("value", new OutputLayer.Builder(LossFunctions.LossFunction.MSE).activation(Activation.IDENTITY)
-                            .nIn(256).nOut(1).build(), "2");
+                    .nIn(256).nOut(1).build(), "2");
 
             confB.addLayer("softmax", new OutputLayer.Builder(new ActorCriticLoss()).activation(Activation.SOFTMAX)
-                            .nIn(256).nOut(numOutputs).build(), "2");
+                    .nIn(256).nOut(numOutputs).build(), "2");
         }
 
         confB.setOutputs("value", "softmax");

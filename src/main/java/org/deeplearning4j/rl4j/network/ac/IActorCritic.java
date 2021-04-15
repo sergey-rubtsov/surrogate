@@ -25,7 +25,7 @@ import java.io.OutputStream;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/5/16.
- *
+ * <p>
  * An actor critic has one of its input act as an actor and the
  * other one as a critic.
  * The first output quantify the advantage provided by getting to one state

@@ -21,7 +21,7 @@ import org.deeplearning4j.rl4j.mdp.MDP;
 
 /**
  * The common API between Learning and AsyncThread.
- *
+ * <p>
  * Express the ability to count the number of step of the current training.
  * Factorisation of a feature between threads in async and learning process
  * for the web monitoring
@@ -31,9 +31,14 @@ import org.deeplearning4j.rl4j.mdp.MDP;
  */
 public interface IEpochTrainer {
     int getStepCount();
+
     int getEpochCount();
+
     int getEpisodeCount();
+
     int getCurrentEpisodeStepCount();
+
     IHistoryProcessor getHistoryProcessor();
+
     MDP getMdp();
 }
