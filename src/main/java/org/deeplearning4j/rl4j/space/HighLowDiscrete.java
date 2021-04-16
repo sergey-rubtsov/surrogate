@@ -16,6 +16,7 @@
 
 package org.deeplearning4j.rl4j.space;
 
+import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
@@ -23,6 +24,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 7/26/16.
  */
 @Value
+@EqualsAndHashCode(callSuper=false)
 public class HighLowDiscrete extends DiscreteSpace {
 
     //size of the space also defined as the number of different actions

@@ -46,7 +46,6 @@ public abstract class Learning<OBSERVATION extends Encodable, A, AS extends Acti
     @Setter
     private int epochCount = 0;
     @Getter
-    @Setter
     private IHistoryProcessor historyProcessor = null;
 
     public static Integer getMaxAction(INDArray vector) {

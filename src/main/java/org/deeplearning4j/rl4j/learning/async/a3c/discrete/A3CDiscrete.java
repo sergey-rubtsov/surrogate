@@ -41,7 +41,7 @@ import org.nd4j.linalg.factory.Nd4j;
  * All methods are fully implemented as described in the
  * https://arxiv.org/abs/1602.01783 paper.
  */
-public abstract class A3CDiscrete<OBSERVATION extends Encodable> extends AsyncLearning<OBSERVATION, Integer, DiscreteSpace, IActorCritic> {
+public class A3CDiscrete<OBSERVATION extends Encodable> extends AsyncLearning<OBSERVATION, Integer, DiscreteSpace, IActorCritic> {
 
     @Getter
     final public A3CLearningConfiguration configuration;

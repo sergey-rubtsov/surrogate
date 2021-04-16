@@ -88,7 +88,6 @@ public abstract class AsyncThread<OBSERVATION extends Encodable, ACTION, ACTION_
     @Getter
     private final int threadNumber;
     @Getter
-    @Setter
     private IHistoryProcessor historyProcessor;
     private final boolean isEpisodeStarted = false;
 

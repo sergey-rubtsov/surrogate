@@ -17,9 +17,10 @@
 package org.surrogate.env.cartpole;
 
 import org.deeplearning4j.rl4j.learning.async.a3c.discrete.A3CDiscrete;
-import org.deeplearning4j.rl4j.learning.async.a3c.discrete.A3CDiscreteDense;
+import org.deeplearning4j.rl4j.learning.configuration.A3CLearningConfiguration;
 import org.deeplearning4j.rl4j.mdp.MDP;
 import org.deeplearning4j.rl4j.network.ac.ActorCriticFactorySeparateStdDense;
+import org.deeplearning4j.rl4j.network.configuration.ActorCriticDenseNetworkConfiguration;
 import org.deeplearning4j.rl4j.policy.ACPolicy;
 import org.deeplearning4j.rl4j.space.Box;
 import org.deeplearning4j.rl4j.space.DiscreteSpace;
@@ -37,30 +38,27 @@ public class A3CTest {
     private static void A3CSimple() throws IOException {
         //define the mdp from gym (name, render)
         MDP<Box, Integer, DiscreteSpace> mdp = new CartpoleNative(1);
+        ActorCriticDenseNetworkConfiguration actorCriticDenseNetworkConfiguration = ActorCriticDenseNetworkConfiguration.builder()
+                .numHiddenNodes(16)
+                .numLayers(3)
+                .l2(0)
+                .updater(new Adam(1e-2))
+                .useLSTM(false).build();
 
-        A3CDiscrete.A3CConfiguration CARTPOLE_A3C =
-            A3CDiscrete.A3CConfiguration.builder()
-                .seed(123)
+        A3CLearningConfiguration a3CLearningConfiguration = A3CLearningConfiguration.builder()
+                .seed(123L)
                 .maxEpochStep(200)
                 .maxStep(5000)
-                .numThread(3)
-                .nstep(20)
-                .updateStart(10)
+                .numThreads(3)
+                .nStep(20)
                 .rewardFactor(0.01)
                 .gamma(0.99)
-                .errorClamp(1.0)
-            .build();
+                .build();
 
-        ActorCriticFactorySeparateStdDense.Configuration CARTPOLE_NET_A3C =  ActorCriticFactorySeparateStdDense.Configuration
-            .builder()
-            .updater(new Adam(1e-2))
-            .l2(0)
-            .numHiddenNodes(16)
-            .numLayer(3)
-            .build();
-
-        //define the training
-        A3CDiscreteDense<Box> a3c = new A3CDiscreteDense<Box>(mdp, CARTPOLE_NET_A3C, CARTPOLE_A3C);
+        A3CDiscrete<Box> a3c = new A3CDiscrete<>(mdp,
+                (new ActorCriticFactorySeparateStdDense(actorCriticDenseNetworkConfiguration))
+                .buildActorCritic(mdp.getObservationSpace().getShape(), mdp.getActionSpace().getSize()),
+                a3CLearningConfiguration);
 
         a3c.train(); //start the training
         mdp.close();
