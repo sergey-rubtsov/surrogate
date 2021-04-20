@@ -18,6 +18,7 @@ package org.surrogate.env.cartpole;
 
 import org.deeplearning4j.rl4j.learning.async.a3c.discrete.A3CDiscrete;
 import org.deeplearning4j.rl4j.learning.configuration.A3CLearningConfiguration;
+import org.deeplearning4j.rl4j.learning.configuration.LearningConfiguration;
 import org.deeplearning4j.rl4j.mdp.MDP;
 import org.deeplearning4j.rl4j.network.ac.ActorCriticFactorySeparateStdDense;
 import org.deeplearning4j.rl4j.network.configuration.ActorCriticDenseNetworkConfiguration;
@@ -45,7 +46,7 @@ public class A3CTest {
                 .updater(new Adam(1e-2))
                 .useLSTM(false).build();
 
-        A3CLearningConfiguration a3CLearningConfiguration = A3CLearningConfiguration.builder()
+        LearningConfiguration a3CLearningConfiguration = LearningConfiguration.builder()
                 .seed(123L)
                 .maxEpochStep(200)
                 .maxStep(5000)

@@ -28,10 +28,12 @@ import org.deeplearning4j.rl4j.learning.IEpochTrainer;
 import org.deeplearning4j.rl4j.learning.IHistoryProcessor;
 import org.deeplearning4j.rl4j.learning.Learning;
 import org.deeplearning4j.rl4j.learning.configuration.IAsyncLearningConfiguration;
+import org.deeplearning4j.rl4j.learning.configuration.LearningConfiguration;
 import org.deeplearning4j.rl4j.learning.listener.TrainingListener;
 import org.deeplearning4j.rl4j.learning.listener.TrainingListenerList;
 import org.deeplearning4j.rl4j.mdp.MDP;
 import org.deeplearning4j.rl4j.network.NeuralNet;
+import org.deeplearning4j.rl4j.network.ac.IActorCritic;
 import org.deeplearning4j.rl4j.observation.Observation;
 import org.deeplearning4j.rl4j.policy.IPolicy;
 import org.deeplearning4j.rl4j.space.ActionSpace;
@@ -217,9 +219,9 @@ public abstract class AsyncThread<OBSERVATION extends Encodable, ACTION, ACTION_
 
     protected abstract IAsyncGlobal<NN> getAsyncGlobal();
 
-    protected abstract IAsyncLearningConfiguration getConfiguration();
+    protected abstract LearningConfiguration getConfiguration();
 
-    protected abstract IPolicy<ACTION> getPolicy(NN net);
+    protected abstract IPolicy<ACTION> getPolicy(IActorCritic net);
 
     protected abstract SubEpochReturn trainSubEpoch(Observation obs, int nstep);
 

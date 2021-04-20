@@ -21,7 +21,7 @@ import lombok.Getter;
 import org.deeplearning4j.rl4j.learning.async.AsyncThreadDiscrete;
 import org.deeplearning4j.rl4j.learning.async.IAsyncGlobal;
 import org.deeplearning4j.rl4j.learning.async.UpdateAlgorithm;
-import org.deeplearning4j.rl4j.learning.configuration.A3CLearningConfiguration;
+import org.deeplearning4j.rl4j.learning.configuration.LearningConfiguration;
 import org.deeplearning4j.rl4j.learning.listener.TrainingListenerList;
 import org.deeplearning4j.rl4j.mdp.MDP;
 import org.deeplearning4j.rl4j.network.ac.IActorCritic;
@@ -40,7 +40,7 @@ import org.nd4j.linalg.factory.Nd4j;
 public class A3CThreadDiscrete<OBSERVATION extends Encodable> extends AsyncThreadDiscrete<OBSERVATION, IActorCritic> {
 
     @Getter
-    final protected A3CLearningConfiguration configuration;
+    final protected LearningConfiguration configuration;
     @Getter
     final protected IAsyncGlobal<IActorCritic> asyncGlobal;
     @Getter
@@ -48,11 +48,14 @@ public class A3CThreadDiscrete<OBSERVATION extends Encodable> extends AsyncThrea
 
     final private Random rnd;
 
-    public A3CThreadDiscrete(MDP<OBSERVATION, Integer, DiscreteSpace> mdp, IAsyncGlobal<IActorCritic> asyncGlobal,
-                             A3CLearningConfiguration a3cc, int deviceNum, TrainingListenerList listeners,
+    public A3CThreadDiscrete(MDP<OBSERVATION, Integer, DiscreteSpace> mdp,
+                             IAsyncGlobal<IActorCritic> asyncGlobal,
+                             LearningConfiguration configuration,
+                             int deviceNum,
+                             TrainingListenerList listeners,
                              int threadNumber) {
-        super(asyncGlobal, mdp, listeners, threadNumber, deviceNum);
-        this.configuration = a3cc;
+        super(mdp, asyncGlobal, configuration, listeners, threadNumber, deviceNum);
+        this.configuration = configuration;
         this.asyncGlobal = asyncGlobal;
         this.threadNumber = threadNumber;
 

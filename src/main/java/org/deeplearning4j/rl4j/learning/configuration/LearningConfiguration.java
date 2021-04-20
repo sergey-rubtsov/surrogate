@@ -56,4 +56,22 @@ public class LearningConfiguration implements ILearningConfiguration {
     @Builder.Default
     private double rewardFactor = 1.0;
 
+    /**
+     * The number of asynchronous threads to use to generate gradients
+     */
+    private int numThreads;
+
+    /**
+     * The number of steps to calculate gradients over
+     */
+    private int nStep;
+
+    /**
+     * The frequency of async training iterations to update the target network.
+     * <p>
+     * If this is set to -1 then the target network is updated after every training iteration
+     */
+    @Builder.Default
+    private int learnerUpdateFrequency = -1;
+
 }

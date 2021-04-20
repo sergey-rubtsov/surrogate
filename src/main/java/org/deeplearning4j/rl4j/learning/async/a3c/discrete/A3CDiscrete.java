@@ -25,7 +25,8 @@ import lombok.Getter;
 import org.deeplearning4j.rl4j.learning.async.AsyncGlobal;
 import org.deeplearning4j.rl4j.learning.async.AsyncLearning;
 import org.deeplearning4j.rl4j.learning.async.AsyncThread;
-import org.deeplearning4j.rl4j.learning.configuration.A3CLearningConfiguration;
+import org.deeplearning4j.rl4j.learning.async.AsyncThreadDiscrete;
+import org.deeplearning4j.rl4j.learning.configuration.LearningConfiguration;
 import org.deeplearning4j.rl4j.mdp.MDP;
 import org.deeplearning4j.rl4j.network.ac.IActorCritic;
 import org.deeplearning4j.rl4j.policy.ACPolicy;
@@ -44,7 +45,7 @@ import org.nd4j.linalg.factory.Nd4j;
 public class A3CDiscrete<OBSERVATION extends Encodable> extends AsyncLearning<OBSERVATION, Integer, DiscreteSpace, IActorCritic> {
 
     @Getter
-    final public A3CLearningConfiguration configuration;
+    final public LearningConfiguration configuration;
     @Getter
     final protected MDP<OBSERVATION, Integer, DiscreteSpace> mdp;
     final private IActorCritic iActorCritic;
@@ -53,7 +54,7 @@ public class A3CDiscrete<OBSERVATION extends Encodable> extends AsyncLearning<OB
     @Getter
     final private ACPolicy<OBSERVATION> policy;
 
-    public A3CDiscrete(MDP<OBSERVATION, Integer, DiscreteSpace> mdp, IActorCritic iActorCritic, A3CLearningConfiguration conf) {
+    public A3CDiscrete(MDP<OBSERVATION, Integer, DiscreteSpace> mdp, IActorCritic iActorCritic, LearningConfiguration conf) {
         this.iActorCritic = iActorCritic;
         this.mdp = mdp;
         this.configuration = conf;
@@ -69,7 +70,7 @@ public class A3CDiscrete<OBSERVATION extends Encodable> extends AsyncLearning<OB
     }
 
     protected AsyncThread newThread(int i, int deviceNum) {
-        return new A3CThreadDiscrete(mdp.newInstance(), asyncGlobal, this.getConfiguration(), deviceNum, getListeners(), i);
+        return new AsyncThreadDiscrete(mdp.newInstance(), asyncGlobal, this.getConfiguration(), getListeners(), i, deviceNum);
     }
 
     public IActorCritic getNeuralNet() {
@@ -95,8 +96,8 @@ public class A3CDiscrete<OBSERVATION extends Encodable> extends AsyncLearning<OB
         /**
          * Converts the deprecated A3CConfiguration to the new LearningConfiguration format
          */
-        public A3CLearningConfiguration toLearningConfiguration() {
-            return A3CLearningConfiguration.builder()
+        public LearningConfiguration toLearningConfiguration() {
+            return LearningConfiguration.builder()
                     .seed(new Long(seed))
                     .maxEpochStep(maxEpochStep)
                     .maxStep(maxStep)

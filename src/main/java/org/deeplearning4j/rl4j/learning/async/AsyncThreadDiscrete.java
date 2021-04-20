@@ -25,24 +25,38 @@ import org.deeplearning4j.gym.StepReply;
 import org.deeplearning4j.rl4j.experience.ExperienceHandler;
 import org.deeplearning4j.rl4j.experience.StateActionExperienceHandler;
 import org.deeplearning4j.rl4j.learning.IHistoryProcessor;
+import org.deeplearning4j.rl4j.learning.async.a3c.discrete.AdvantageActorCriticUpdateAlgorithm;
+import org.deeplearning4j.rl4j.learning.configuration.LearningConfiguration;
 import org.deeplearning4j.rl4j.learning.listener.TrainingListenerList;
 import org.deeplearning4j.rl4j.mdp.MDP;
 import org.deeplearning4j.rl4j.network.NeuralNet;
+import org.deeplearning4j.rl4j.network.ac.IActorCritic;
 import org.deeplearning4j.rl4j.observation.Observation;
+import org.deeplearning4j.rl4j.policy.ACPolicy;
 import org.deeplearning4j.rl4j.policy.IPolicy;
+import org.deeplearning4j.rl4j.policy.Policy;
 import org.deeplearning4j.rl4j.space.DiscreteSpace;
 import org.deeplearning4j.rl4j.space.Encodable;
+import org.nd4j.linalg.api.rng.Random;
+import org.nd4j.linalg.factory.Nd4j;
 
 /**
  * @author rubenfiszel (ruben.fiszel@epfl.ch) on 8/5/16.
  * <p>
  * Async Learning specialized for the Discrete Domain
  */
-public abstract class AsyncThreadDiscrete<OBSERVATION extends Encodable, NN extends NeuralNet>
+public class AsyncThreadDiscrete<OBSERVATION extends Encodable, NN extends NeuralNet>
         extends AsyncThread<OBSERVATION, Integer, DiscreteSpace, NN> {
 
     @Getter
+    final protected LearningConfiguration configuration;
+    @Getter
+    final protected IAsyncGlobal<NN> asyncGlobal;
+
+    @Getter
     private final NN current;
+
+    final private Random rnd;
 
     @Setter(AccessLevel.PROTECTED)
     private UpdateAlgorithm<NN> updateAlgorithm;
@@ -52,19 +66,40 @@ public abstract class AsyncThreadDiscrete<OBSERVATION extends Encodable, NN exte
     @Getter
     private ExperienceHandler experienceHandler = new StateActionExperienceHandler();
 
-    public AsyncThreadDiscrete(IAsyncGlobal<NN> asyncGlobal,
+    public AsyncThreadDiscrete(
                                MDP<OBSERVATION, Integer, DiscreteSpace> mdp,
+                               IAsyncGlobal<NN> asyncGlobal,
+                               LearningConfiguration configuration,
                                TrainingListenerList listeners,
                                int threadNumber,
                                int deviceNum) {
         super(mdp, listeners, threadNumber, deviceNum);
+        this.asyncGlobal = asyncGlobal;
+        this.configuration = configuration;
         synchronized (asyncGlobal) {
             current = (NN) asyncGlobal.getTarget().clone();
         }
+        Long seed = configuration.getSeed();
+        rnd = Nd4j.getRandom();
+        if (seed != null) {
+            rnd.setSeed(seed + threadNumber);
+        }
+
+        setUpdateAlgorithm(buildUpdateAlgorithm());
     }
 
-    // TODO: Add an actor-learner class and be able to inject the update algorithm
-    protected abstract UpdateAlgorithm<NN> buildUpdateAlgorithm();
+    protected Policy<Integer> getPolicy(IActorCritic net) {
+        return new ACPolicy(net, rnd);
+    }
+
+    /**
+     * calc the gradients based on the n-step rewards
+     */
+
+    protected UpdateAlgorithm<NN> buildUpdateAlgorithm() {
+        int[] shape = getHistoryProcessor() == null ? getMdp().getObservationSpace().getShape() : getHistoryProcessor().getConf().getShape();
+        return (UpdateAlgorithm<NN>) new AdvantageActorCriticUpdateAlgorithm(asyncGlobal.getTarget().isRecurrent(), shape, getMdp().getActionSpace().getSize(), configuration.getGamma());
+    }
 
     @Override
     public void setHistoryProcessor(IHistoryProcessor historyProcessor) {
@@ -91,7 +126,7 @@ public abstract class AsyncThreadDiscrete<OBSERVATION extends Encodable, NN exte
         current.copy(getAsyncGlobal().getTarget());
 
         Observation obs = sObs;
-        IPolicy<Integer> policy = getPolicy(current);
+        IPolicy<Integer> policy = getPolicy((IActorCritic) current);
 
         Integer action = getMdp().getActionSpace().noOp();
 

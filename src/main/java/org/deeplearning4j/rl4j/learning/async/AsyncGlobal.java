@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.deeplearning4j.nn.gradient.Gradient;
 import org.deeplearning4j.rl4j.learning.configuration.IAsyncLearningConfiguration;
+import org.deeplearning4j.rl4j.learning.configuration.LearningConfiguration;
 import org.deeplearning4j.rl4j.network.NeuralNet;
 
 import java.util.concurrent.locks.Lock;
@@ -53,7 +54,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class AsyncGlobal<NN extends NeuralNet> implements IAsyncGlobal<NN> {
 
     final private NN current;
-    final private IAsyncLearningConfiguration configuration;
+    final private LearningConfiguration configuration;
     @Getter
     private final Lock updateLock;
     private final NN target;
@@ -66,7 +67,7 @@ public class AsyncGlobal<NN extends NeuralNet> implements IAsyncGlobal<NN> {
     @Getter
     private int stepCount;
 
-    public AsyncGlobal(NN initial, IAsyncLearningConfiguration configuration) {
+    public AsyncGlobal(NN initial, LearningConfiguration configuration) {
         this.current = initial;
         target = (NN) initial.clone();
         this.configuration = configuration;
