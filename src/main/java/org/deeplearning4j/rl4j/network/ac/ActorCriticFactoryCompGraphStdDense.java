@@ -29,7 +29,7 @@ import org.deeplearning4j.nn.conf.layers.RnnOutputLayer;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
-import org.deeplearning4j.rl4j.network.configuration.ActorCriticDenseNetworkConfiguration;
+import org.deeplearning4j.rl4j.network.configuration.NetworkConfiguration;
 import org.deeplearning4j.rl4j.util.Constants;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.learning.config.Adam;
@@ -41,7 +41,7 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 @Value
 public class ActorCriticFactoryCompGraphStdDense implements ActorCriticFactoryCompGraph {
 
-    ActorCriticDenseNetworkConfiguration conf;
+    NetworkConfiguration conf;
 
     public ActorCriticCompGraph buildActorCritic(int[] numInputs, int numOutputs) {
         int nIn = 1;

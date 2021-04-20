@@ -17,11 +17,10 @@
 package org.surrogate.env.cartpole;
 
 import org.deeplearning4j.rl4j.learning.async.a3c.discrete.A3CDiscrete;
-import org.deeplearning4j.rl4j.learning.configuration.A3CLearningConfiguration;
 import org.deeplearning4j.rl4j.learning.configuration.LearningConfiguration;
 import org.deeplearning4j.rl4j.mdp.MDP;
 import org.deeplearning4j.rl4j.network.ac.ActorCriticFactorySeparateStdDense;
-import org.deeplearning4j.rl4j.network.configuration.ActorCriticDenseNetworkConfiguration;
+import org.deeplearning4j.rl4j.network.configuration.NetworkConfiguration;
 import org.deeplearning4j.rl4j.policy.ACPolicy;
 import org.deeplearning4j.rl4j.space.Box;
 import org.deeplearning4j.rl4j.space.DiscreteSpace;
@@ -39,7 +38,7 @@ public class A3CTest {
     private static void A3CSimple() throws IOException {
         //define the mdp from gym (name, render)
         MDP<Box, Integer, DiscreteSpace> mdp = new CartpoleNative(1);
-        ActorCriticDenseNetworkConfiguration actorCriticDenseNetworkConfiguration = ActorCriticDenseNetworkConfiguration.builder()
+        NetworkConfiguration actorCriticDenseNetworkConfiguration = NetworkConfiguration.builder()
                 .numHiddenNodes(16)
                 .numLayers(3)
                 .l2(0)

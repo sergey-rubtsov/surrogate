@@ -17,6 +17,7 @@
 package org.deeplearning4j.rl4j.learning.configuration;
 
 public interface ILearningConfiguration {
+
     Long getSeed();
 
     int getMaxEpochStep();
@@ -26,4 +27,17 @@ public interface ILearningConfiguration {
     double getGamma();
 
     double getRewardFactor();
+
+    int getNumThreads();
+
+    /**
+     * The number of steps to collect for each worker thread between each global update
+     */
+    int getNStep();
+
+    /**
+     * The frequency of worker thread gradient updates to perform a copy of the current working network to the target network
+     */
+    int getLearnerUpdateFrequency();
+
 }

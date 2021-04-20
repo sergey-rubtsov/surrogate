@@ -24,7 +24,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class AsyncQLearningConfiguration extends QLearningConfiguration implements IAsyncLearningConfiguration {
+public class AsyncQLearningConfiguration extends QLearningConfiguration implements ILearningConfiguration {
 
     /**
      * The number of asynchronous threads to use to generate experience data

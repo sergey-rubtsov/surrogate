@@ -18,7 +18,6 @@ package org.deeplearning4j.rl4j.network.configuration;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import org.deeplearning4j.optimize.api.TrainingListener;
@@ -26,11 +25,15 @@ import org.nd4j.linalg.learning.config.IUpdater;
 
 import java.util.List;
 
-
 @Data
 @SuperBuilder
-@NoArgsConstructor
 public class NetworkConfiguration {
+
+    /**
+     * Whether or not to add an LSTM layer to the network.
+     */
+    @Builder.Default
+    private boolean useLSTM = false;
 
     /**
      * The learning rate of the network
@@ -54,5 +57,18 @@ public class NetworkConfiguration {
      */
     @Singular
     private List<TrainingListener> listeners;
+
+    /**
+     * The number of layers in the dense network
+     */
+    @Builder.Default
+    private int numLayers = 3;
+
+    /**
+     * The number of hidden neurons in each layer
+     */
+    @Builder.Default
+    private int numHiddenNodes = 100;
+
 
 }

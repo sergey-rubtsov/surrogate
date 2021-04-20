@@ -24,7 +24,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class A3CLearningConfiguration extends LearningConfiguration implements IAsyncLearningConfiguration {
+public class A3CLearningConfiguration extends LearningConfiguration implements ILearningConfiguration {
 
     /**
      * The number of asynchronous threads to use to generate gradients
